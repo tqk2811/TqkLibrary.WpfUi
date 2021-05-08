@@ -1,0 +1,11 @@
+﻿<Window x:Class="TqkLibrary.WpfUi.Windows.OauthWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:TqkLibrary.WpfUi.Windows"
+             mc:Ignorable="d" Loaded="Window_Loaded" d:DesignWidth="800" Height="577.6" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <WebBrowser x:Name="WB" Navigating="WB_Navigating" />
+    </Grid>
+</Window>
