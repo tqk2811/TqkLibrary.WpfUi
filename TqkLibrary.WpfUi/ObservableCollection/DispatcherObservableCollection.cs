@@ -12,7 +12,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
 {
   public class DispatcherObservableCollection<T> : ObservableCollection<T>
   {
-    readonly Dispatcher dispatcher;
+    protected readonly Dispatcher dispatcher;
     public DispatcherObservableCollection(): this(Application.Current.Dispatcher)
     {
 

@@ -55,10 +55,10 @@ namespace TqkLibrary.WpfUi
 
     public static IEnumerable<T> RandomLoop<T>(this IEnumerable<T> input, int count, bool randomFirst = false)
     {
-      if (input == null || input.Count() == 0) return input;
-      if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+      if (input == null || input.Count() <= 1) return input;
+      if (count <= 0) count = 1;
 
-      Random random = new Random();
+      Random random = new Random(DateTime.Now.Millisecond);
       List<T> result = new List<T>();
 
       if (randomFirst) result.AddRange(input.OrderBy(x => Guid.NewGuid()));
@@ -80,6 +80,25 @@ namespace TqkLibrary.WpfUi
         result.AddRange(list_work);
       }
       return result;
+    }
+
+
+
+    public static readonly string[] unit_size = { "Byte", "Kib", "Mib", "Gib", "Tib" };
+    public static readonly string[] unit_speed = { "Byte/s", "Kib/s", "Mib/s", "Gib/s", "Tib/s" };
+    public static string ConvertSize(double num, int round, string[] unit, int div = 1024)
+    {
+      if (num == 0) return "0 " + unit[0];
+      for (double i = 0; i < unit.Length; i++)
+      {
+        double sizeitem = num / Math.Pow(div, i);
+        if (sizeitem < 1 && sizeitem > -1)
+        {
+          if (i == 0) return "0 " + unit[0];
+          else return Math.Round((num / Math.Pow(div, i - 1)), round).ToString() + " " + unit[(int)i - 1];
+        }
+      }
+      return Math.Round(num / Math.Pow(div, unit.Length - 1), round).ToString() + " " + unit[unit.Length - 1];
     }
   }
 }

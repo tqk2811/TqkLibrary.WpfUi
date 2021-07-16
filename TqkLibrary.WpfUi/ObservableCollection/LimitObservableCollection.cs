@@ -13,7 +13,14 @@ namespace TqkLibrary.WpfUi.ObservableCollection
     protected override void InsertItem(int index, T item)
     {
       if (this.Count == Limit) base.RemoveAt(IsInsertTop ? this.Count - 1 : 0);
-      if (!string.IsNullOrEmpty(LogPath)) using (StreamWriter sw = new StreamWriter(LogPath, true)) sw.WriteLine(item.ToString());
+      if (!string.IsNullOrEmpty(LogPath))
+      {
+        dispatcher.Invoke(() =>
+        {
+          using StreamWriter sw = new StreamWriter(LogPath, true);
+          sw.WriteLine(item.ToString());
+        });
+      }
       base.InsertItem(IsInsertTop ? 0 : this.Count, item);
     }
 
