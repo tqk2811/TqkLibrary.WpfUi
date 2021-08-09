@@ -8,13 +8,16 @@ namespace TqkLibrary.WpfUi.Converters
   {
     public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     {
-      if (targetType != typeof(bool)) throw new InvalidOperationException("The target must be a boolean");
+      if (targetType != typeof(bool) && targetType != typeof(bool?)) throw new InvalidOperationException("The target must be a bool or bool?");
+      if (value == null) return true;
       return !(bool)value;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
     {
-      throw new NotSupportedException();
+      if (targetType != typeof(bool) && targetType != typeof(bool?)) throw new InvalidOperationException("The target must be a bool or bool?");
+      if (value == null) return true;
+      return !(bool)value;
     }
   }
 }
