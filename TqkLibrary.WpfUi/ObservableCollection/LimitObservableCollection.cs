@@ -6,20 +6,34 @@ namespace TqkLibrary.WpfUi.ObservableCollection
 {
   public class LimitObservableCollection<T> : DispatcherObservableCollection<T>
   {
+    public LimitObservableCollection()
+    {
+      this.LogPath = new Func<string>(() => $"{Directory.GetCurrentDirectory()}\\{DateTime.Now:yyyy-MM-dd}.log");
+    }
+    public LimitObservableCollection(Func<string> delegatePath, int Limit = 500, bool IsInsertTop = true)
+    {
+      this.LogPath = delegatePath;
+      this.Limit = Limit;
+      this.IsInsertTop = IsInsertTop;
+    }
     public int Limit { get; set; } = 100;
     public bool IsInsertTop { get; set; } = false;
-    public string LogPath { get; set; } = $"{DateTime.Now:yyyy-MM-dd}.log";
+    public Func<string> LogPath { get; set; }
 
     protected override void InsertItem(int index, T item)
     {
       if (this.Count == Limit) base.RemoveAt(IsInsertTop ? this.Count - 1 : 0);
-      if (!string.IsNullOrEmpty(LogPath))
+      if (LogPath != null)
       {
-        dispatcher.Invoke(() =>
+        string path = LogPath.Invoke();
+        if(!string.IsNullOrEmpty(path))
         {
-          using StreamWriter sw = new StreamWriter(LogPath, true);
-          sw.WriteLine(item.ToString());
-        });
+          dispatcher.Invoke(() =>
+          {
+            using StreamWriter sw = new StreamWriter(path, true);
+            sw.WriteLine(item.ToString());
+          });
+        }
       }
       base.InsertItem(IsInsertTop ? 0 : this.Count, item);
     }
