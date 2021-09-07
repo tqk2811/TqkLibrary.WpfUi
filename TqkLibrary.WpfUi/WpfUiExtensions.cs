@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
-using System.Windows.Media.Imaging;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media.Imaging;
+using System.Drawing;
+
 namespace TqkLibrary.WpfUi
 {
   public static class WpfUiExtensions
@@ -15,7 +16,7 @@ namespace TqkLibrary.WpfUi
     [return: MarshalAs(UnmanagedType.Bool)]
     internal static extern bool DeleteObject([In] IntPtr hObject);
 
-    public static System.Windows.Media.ImageSource ToImageSource(this System.Drawing.Bitmap src)
+    public static System.Windows.Media.ImageSource ToImageSource(this Bitmap src)
     {
       if (null == src) throw new ArgumentNullException(nameof(src));
       var handle = src.GetHbitmap();
@@ -86,19 +87,19 @@ namespace TqkLibrary.WpfUi
 
     public static readonly string[] unit_size = { "Byte", "Kib", "Mib", "Gib", "Tib" };
     public static readonly string[] unit_speed = { "Byte/s", "Kib/s", "Mib/s", "Gib/s", "Tib/s" };
-    public static string ConvertSize(double num, int round, string[] unit, int div = 1024)
+    public static string ConvertSize(double num, int round, string[] units, int div = 1024)
     {
-      if (num == 0) return "0 " + unit[0];
-      for (double i = 0; i < unit.Length; i++)
+      if (num == 0) return "0 " + units[0];
+      for (double i = 0; i < units.Length; i++)
       {
         double sizeitem = num / Math.Pow(div, i);
         if (sizeitem < 1 && sizeitem > -1)
         {
-          if (i == 0) return "0 " + unit[0];
-          else return Math.Round((num / Math.Pow(div, i - 1)), round).ToString() + " " + unit[(int)i - 1];
+          if (i == 0) return "0 " + units[0];
+          else return Math.Round((num / Math.Pow(div, i - 1)), round).ToString() + " " + units[(int)i - 1];
         }
       }
-      return Math.Round(num / Math.Pow(div, unit.Length - 1), round).ToString() + " " + unit[unit.Length - 1];
+      return Math.Round(num / Math.Pow(div, units.Length - 1), round).ToString() + " " + units[units.Length - 1];
     }
 
     public static TAttribute GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute

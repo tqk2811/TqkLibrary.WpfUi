@@ -1,23 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;net462;net48</TargetFrameworks>
+    <TargetFrameworks>net462;net5.0-windows</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <Platforms>AnyCPU</Platforms>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <None Remove="UserControls\TextBlockEdit.xaml" />
     <None Remove="Windows\InputBox.xaml" />
     <None Remove="Windows\OauthWindow.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,14 +27,27 @@
     <Page Include="Windows\OauthWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-
+  </ItemGroup>-->
+  
+  
   <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Condition="$(TargetFramework.StartsWith('net5'))" Include="System.Drawing.Common" Version="5.0.2" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System.Windows" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xaml" />
     <Reference Include="WindowsBase" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net5'))">
+    <FrameworkReference Include="Microsoft.NETCore.App" />
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
   </ItemGroup>
 
 </Project>
