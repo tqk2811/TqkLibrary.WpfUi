@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;net5.0-windows</TargetFrameworks>
+    <TargetFrameworks>net462;net5.0-windows;net6.0-windows</TargetFrameworks>
     <LangVersion>8.0</LangVersion>
     <Platforms>AnyCPU</Platforms>
     <SignAssembly>true</SignAssembly>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Condition="$(TargetFramework.StartsWith('net5'))" Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
   
   <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
@@ -45,9 +44,10 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net5'))">
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net5')) Or $(TargetFramework.StartsWith('net6'))">
     <FrameworkReference Include="Microsoft.NETCore.App" />
     <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
 </Project>
