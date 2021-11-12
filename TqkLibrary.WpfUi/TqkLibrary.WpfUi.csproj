@@ -8,27 +8,7 @@
     <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <UseWPF>true</UseWPF>
-  </PropertyGroup>
-
-  <!--<ItemGroup>
-    <None Remove="UserControls\TextBlockEdit.xaml" />
-    <None Remove="Windows\InputBox.xaml" />
-    <None Remove="Windows\OauthWindow.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Include="UserControls\TextBlockEdit.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\InputBox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\OauthWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>-->
-  
+  </PropertyGroup>  
   
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />

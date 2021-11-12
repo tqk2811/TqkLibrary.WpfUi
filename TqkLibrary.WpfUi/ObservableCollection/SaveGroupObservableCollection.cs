@@ -15,7 +15,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
   {
     public TId GroupId { get; set; }
   }
-  public class SaveGroupObservableCollection<TId, TData, TViewModel> : ObservableCollection<TViewModel>
+  public class SaveGroupObservableCollection<TId, TData, TViewModel> : DispatcherObservableCollection<TViewModel>
     where TData : class, IItemData<TId>//data
     where TViewModel : class, IViewModel<TData>//viewmodel
   {
@@ -27,20 +27,25 @@ namespace TqkLibrary.WpfUi.ObservableCollection
       set { timer.Interval = value; }
     }
     public bool IsSearchMode { get; private set; } = false;
+    public TId CurrentGroupId { get; private set; }
+
 
     readonly Func<TData, TViewModel> func;
     readonly List<TData> datas = new List<TData>();
     private readonly Timer timer;
     private bool IsLoaded = false;
-    private TId currentId;
-    public SaveGroupObservableCollection(Func<TData, TViewModel> func, int interval = 500)
+    
+    public SaveGroupObservableCollection(Func<TData, TViewModel> func, string savePath, int interval = 500)
     {
+      if (string.IsNullOrEmpty(savePath)) throw new ArgumentNullException(nameof(savePath));
       this.func = func ?? throw new ArgumentNullException(nameof(func));
+      this.SavePath = savePath;
       timer = new Timer(interval)
       {
         AutoReset = false
       };
       timer.Elapsed += Timer_Elapsed;
+      Load();
     }
 
     private void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -71,11 +76,8 @@ namespace TqkLibrary.WpfUi.ObservableCollection
       catch (Exception) { }
     }
 
-    public void Load(string savePath = null)
+    void Load()
     {
-      if (!string.IsNullOrEmpty(savePath)) this.SavePath = savePath;
-      if (string.IsNullOrEmpty(this.SavePath)) throw new ArgumentNullException(nameof(savePath));
-      datas.Clear();
       if (File.Exists(this.SavePath))
       {
         try
@@ -85,6 +87,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         }
         catch (Exception) { }
       }
+      IsLoaded = true;
     }
 
     public void HideAll()
@@ -95,11 +98,16 @@ namespace TqkLibrary.WpfUi.ObservableCollection
       IsLoaded = true;
     }
 
+    public IEnumerable<TId> GetGroups()
+    {
+      return datas.GroupBy(x => x.GroupId).Select(x => x.Key);
+    }
+
     public void ShowGroup(TId id)
     {
       if (id == null) throw new ArgumentNullException(nameof(id));
       IsLoaded = false;
-      this.currentId = id;
+      this.CurrentGroupId = id;
       IsSearchMode = false;
       this.Clear();
       foreach (var item in datas.Where(x => id.Equals(x.GroupId))) this.Add(func?.Invoke(item));
@@ -126,7 +134,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         TViewModel viewModel = this.FirstOrDefault(x => data.Equals(x.Data));
         if (!this.Remove(viewModel))
         {
-          if (newId.Equals(currentId))
+          if (newId.Equals(CurrentGroupId))
           {
             if (viewModel == null) viewModel = func.Invoke(data);
             this.Add(viewModel);
