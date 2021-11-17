@@ -13,8 +13,8 @@
              Loaded="root_Loaded"
              d:DesignWidth="60" d:DesignHeight="20">
     <UserControl.Resources>
-        <Converters:BooleanFalseToHiddenConverter x:Key="TrueToVisibleConverter"/>
-        <Converters:BooleanFalseToHiddenConverter x:Key="FalseToVisibleConverter" IsReversed="True"/>
+        <Converters:BooleanToVisibleConverter x:Key="TrueToVisibleConverter"/>
+        <Converters:BooleanToVisibleConverter x:Key="FalseToVisibleConverter" IsReversed="True"/>
     </UserControl.Resources>
     <Grid>
         <Grid.Style>
