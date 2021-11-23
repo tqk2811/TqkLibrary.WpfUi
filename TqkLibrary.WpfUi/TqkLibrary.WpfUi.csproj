@@ -1,33 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFrameworks>net462;net5.0-windows;net6.0-windows</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
-    <Platforms>AnyCPU</Platforms>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>  
-  
-  <ItemGroup>
-    <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="$(TargetFramework.StartsWith('net5')) Or $(TargetFramework.StartsWith('net6'))">
-    <FrameworkReference Include="Microsoft.NETCore.App" />
-    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFrameworks>net462;net5.0-windows;net6.0-windows</TargetFrameworks>
+		<LangVersion>8.0</LangVersion>
+		<Platforms>AnyCPU</Platforms>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>Key.pfx</AssemblyOriginatorKeyFile>
+		<UseWPF>true</UseWPF>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="JetBrains.Annotations" Version="2021.3.0"/>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+	</ItemGroup>
 </Project>
