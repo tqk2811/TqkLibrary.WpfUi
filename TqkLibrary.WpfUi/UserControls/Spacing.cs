@@ -1,5 +1,4 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,13 +29,11 @@ namespace TqkLibrary.WpfUi.UserControls
       MarginSetter.SetLastItemMargin(obj, new Thickness(0));
     }
 
-    [UsedImplicitly]
     public static void SetHorizontal(DependencyObject obj, double space)
     {
       obj.SetValue(HorizontalProperty, space);
     }
 
-    [UsedImplicitly]
     public static void SetVertical(DependencyObject obj, double value)
     {
       obj.SetValue(VerticalProperty, value);

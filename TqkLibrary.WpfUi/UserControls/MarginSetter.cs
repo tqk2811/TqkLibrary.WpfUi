@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using JetBrains.Annotations;
 
 namespace TqkLibrary.WpfUi.UserControls
 {
@@ -17,7 +16,6 @@ namespace TqkLibrary.WpfUi.UserControls
       return (Thickness)obj.GetValue(LastItemMarginProperty);
     }
 
-    [UsedImplicitly]
     public static Thickness GetMargin(DependencyObject obj)
     {
       return (Thickness)obj.GetValue(MarginProperty);
@@ -53,13 +51,11 @@ namespace TqkLibrary.WpfUi.UserControls
       }
     }
 
-    [UsedImplicitly]
     public static void SetLastItemMargin(DependencyObject obj, Thickness value)
     {
       obj.SetValue(LastItemMarginProperty, value);
     }
 
-    [UsedImplicitly]
     public static void SetMargin(DependencyObject obj, Thickness value)
     {
       obj.SetValue(MarginProperty, value);
