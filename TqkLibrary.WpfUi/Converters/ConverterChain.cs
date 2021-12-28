@@ -9,37 +9,19 @@ using System.Windows.Data;
 
 namespace TqkLibrary.WpfUi.Converters
 {
-    public class ConverterChain : IValueConverter
+    public class ConverterChain : Collection<IValueConverter>, IValueConverter
     {
-        private readonly ValueConverterCollection _converters = new ValueConverterCollection();
-
-        /// <summary>Gets the converters to execute.</summary>
-        public ValueConverterCollection Converters
-        {
-            get { return _converters; }
-        }
-
-        #region IValueConverter Members
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converters
+            return this
                 .Aggregate(value, (current, converter) => converter.Convert(current, targetType, parameter, culture));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Converters
+            return this
                 .Reverse()
                 .Aggregate(value, (current, converter) => converter.ConvertBack(current, targetType, parameter, culture));
         }
-
-        #endregion
-    }
-
-    /// <summary>Represents a collection of <see cref="IValueConverter"/>s.</summary>
-    public sealed class ValueConverterCollection : Collection<IValueConverter>
-    {
-
     }
 }
