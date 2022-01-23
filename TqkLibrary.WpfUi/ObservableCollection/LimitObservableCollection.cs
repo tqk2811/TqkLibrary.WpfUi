@@ -28,7 +28,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         string path = LogPath.Invoke();
         if(!string.IsNullOrEmpty(path))
         {
-          dispatcher.Invoke(() =>
+          Dispatcher.Invoke(() =>
           {
             using StreamWriter sw = new StreamWriter(path, true);
             sw.WriteLine(item.ToString());

@@ -73,10 +73,8 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="itemsProvider">The items provider.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="pageTimeout">The page timeout.</param>
-        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout)
+        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout) : this(itemsProvider, pageSize)
         {
-            _itemsProvider = itemsProvider;
-            _pageSize = pageSize;
             _pageTimeout = pageTimeout;
         }
 
@@ -85,9 +83,8 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// </summary>
         /// <param name="itemsProvider">The items provider.</param>
         /// <param name="pageSize">Size of the page.</param>
-        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize)
+        public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize) : this(itemsProvider)
         {
-            _itemsProvider = itemsProvider;
             _pageSize = pageSize;
         }
 
@@ -98,11 +95,23 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         public VirtualizingCollection(IItemsProvider<T> itemsProvider)
         {
             _itemsProvider = itemsProvider;
+            _itemsProvider.PropertyChanged += ItemsProvider_PropertyChanged;
+            _itemsProvider.CollectionChanged += ItemsProvider_CollectionChanged;
         }
 
         #endregion
 
         #region ItemsProvider
+        protected virtual void ItemsProvider_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+
+        }
+
+        protected virtual void ItemsProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+        }
+
 
         private readonly IItemsProvider<T> _itemsProvider;
 
@@ -213,7 +222,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
                     return default(T);
 
                 // return requested item
-                return _pages[pageIndex][pageOffset];
+                return _pages[pageIndex].Skip(pageOffset).FirstOrDefault();
             }
             set { throw new NotSupportedException(); }
         }

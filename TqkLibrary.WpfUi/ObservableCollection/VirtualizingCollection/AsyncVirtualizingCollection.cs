@@ -224,5 +224,17 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         }
 
         #endregion
+
+
+
+        protected override void ItemsProvider_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnCollectionChanged(e);
+        }
+
+        protected override void ItemsProvider_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+
+        }
     }
 }
