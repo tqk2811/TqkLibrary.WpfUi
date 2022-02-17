@@ -93,7 +93,7 @@ namespace TqkLibrary.WpfUi.UserControls
                 BeginAnimation(FrameIndexProperty, null);
             }
 
-            IsAnimationWorking = false;
+            //IsAnimationWorking = false;
             Animation = null;
             Decoder = null;
         }
@@ -135,7 +135,7 @@ namespace TqkLibrary.WpfUi.UserControls
 
             base.Source = Decoder.Frames[0];
             BeginAnimation(FrameIndexProperty, Animation);
-            IsAnimationWorking = true;
+            //IsAnimationWorking = true;
         }
 
         private bool IsAnimatedGifImage(BitmapImage aBitmapImage)
