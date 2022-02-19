@@ -2,7 +2,7 @@
 $projectName= $dirInfo.Name;
 $key=$env:nugetKey
 $buildDay=[DateTime]::Now.ToString("yyyyMMdd")
-$buildIndex="01"
+$buildIndex="00"
 $p="buildDay=$($buildDay);buildIndex=$($buildIndex)".Trim()
 
 function RunCommand
