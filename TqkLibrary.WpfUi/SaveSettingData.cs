@@ -1,33 +1,80 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Timers;
 
 namespace TqkLibrary.WpfUi
 {
-  public class SaveSettingData<T> where T : new()
-  {
-    public T Setting { get; private set; }
-    private readonly string SavePath;
-    private readonly Timer timer;
-
-    public SaveSettingData(string SavePath, int delay = 500)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class SaveSettingData<T> where T : new()
     {
-      if (string.IsNullOrEmpty(SavePath)) throw new ArgumentNullException(nameof(SavePath));
-      this.SavePath = SavePath;
-      if (File.Exists(SavePath)) Setting = JsonConvert.DeserializeObject<T>(File.ReadAllText(SavePath));
-      else Setting = new T();
-      timer = new Timer(delay);
-      timer.Elapsed += Timer_Elapsed;
-      timer.AutoReset = false;
-    }
+        /// <summary>
+        /// 
+        /// </summary>
+        public T Setting { get; private set; }
+        private readonly string SavePath;
+        private readonly Timer timer;
 
-    private void Timer_Elapsed(object sender, ElapsedEventArgs e) => File.WriteAllText(SavePath, JsonConvert.SerializeObject(Setting));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SavePath"></param>
+        /// <param name="delay"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public SaveSettingData(string SavePath, int delay = 500)
+        {
+            if (string.IsNullOrEmpty(SavePath)) throw new ArgumentNullException(nameof(SavePath));
+            this.SavePath = SavePath;
+            if (File.Exists(SavePath)) Setting = JsonConvert.DeserializeObject<T>(File.ReadAllText(SavePath));
+            else Setting = new T();
+            timer = new Timer(delay);
+            timer.Elapsed += Timer_Elapsed;
+            timer.AutoReset = false;
+        }
 
-    public void Save()
-    {
-      timer?.Stop();
-      timer?.Start();
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            try
+            {
+                File.WriteAllText(SavePath, JsonConvert.SerializeObject(Setting, Formatting.Indented));
+            }
+            catch
+            {
+
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void Save()
+        {
+            timer?.Stop();
+            timer?.Start();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task SaveAsync()
+        {
+            TaskCompletionSource<bool> result = new TaskCompletionSource<bool>();
+            ElapsedEventHandler action = (object sender, ElapsedEventArgs e) => result.TrySetResult(true);
+            Save();
+            try
+            {
+                timer.Elapsed += action;
+                await result.Task.ConfigureAwait(false);
+            }
+            finally
+            {
+                timer.Elapsed -= action;
+            }
+        }
     }
-  }
 }
