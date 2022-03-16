@@ -147,5 +147,42 @@ namespace TqkLibrary.WpfUi
             var name = Enum.GetName(enumType, value);
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
         }
+
+
+
+        private static Random rd = new Random();
+        private const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        private const string charsAndNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        private const string Nums = "0123456789";
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lengthMin"></param>
+        /// <param name="lengthMax"></param>
+        /// <returns></returns>
+        public static string RandomString(int lengthMin, int lengthMax)
+        {
+            return new string(Enumerable.Repeat(chars, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lengthMin"></param>
+        /// <param name="lengthMax"></param>
+        /// <returns></returns>
+        public static string RandomNumber(int lengthMin, int lengthMax)
+        {
+            return new string(Enumerable.Repeat(Nums, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lengthMin"></param>
+        /// <param name="lengthMax"></param>
+        /// <returns></returns>
+        public static string RandomStringAndNum(int lengthMin, int lengthMax)
+        {
+            return new string(Enumerable.Repeat(charsAndNum, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
+        }
     }
 }
