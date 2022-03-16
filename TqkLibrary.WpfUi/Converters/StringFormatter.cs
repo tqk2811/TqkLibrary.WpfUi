@@ -8,27 +8,45 @@ using System.Windows.Data;
 
 namespace TqkLibrary.WpfUi.Converters
 {
-  internal class StringFormatter : IMultiValueConverter
-  {
-    string StringFormat = string.Empty;
-    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    /// <summary>
+    /// 
+    /// </summary>
+    internal class StringFormatter : IMultiValueConverter
     {
-      if(values != null && values.Length > 1 && values[0] != null && values[1] is string format)
-      {
-        if (string.IsNullOrEmpty(format)) return values[0].ToString();
-        else
+        string StringFormat = string.Empty;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="values"></param>
+        /// <param name="targetType"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-          StringFormat = format;
-          if (values[0] is double _double) return _double.ToString(format);
-          return string.Format(format, values[0]);
+            if (values != null && values.Length > 1 && values[0] != null && values[1] is string format)
+            {
+                if (string.IsNullOrEmpty(format)) return values[0].ToString();
+                else
+                {
+                    StringFormat = format;
+                    if (values[0] is double _double) return _double.ToString(format);
+                    return string.Format(format, values[0]);
+                }
+            }
+            return string.Empty;
         }
-      }
-      return string.Empty;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="targetTypes"></param>
+        /// <param name="parameter"></param>
+        /// <param name="culture"></param>
+        /// <returns></returns>
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            return new object[] { value, StringFormat };
+        }
     }
-
-    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-    {
-      return new object[] { value , StringFormat };
-    }
-  }
 }

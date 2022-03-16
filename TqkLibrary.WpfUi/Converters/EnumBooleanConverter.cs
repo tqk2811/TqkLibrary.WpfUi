@@ -7,8 +7,12 @@ namespace TqkLibrary.WpfUi.Converters
     /// <summary>
     /// enum is equal (value & parameter) -> true else false
     /// </summary>
+    [ValueConversion(typeof(Enum), typeof(Enum))]
     public class EnumBooleanConverter : IValueConverter
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsAttributeFlag { get; set; } = true;
 
         private Enum CurrentValue;
@@ -52,9 +56,17 @@ namespace TqkLibrary.WpfUi.Converters
             }
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public static class EnumExtensions
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static Enum Or(this Enum a, Enum b)
         {
             // consider adding argument validation here
@@ -63,7 +75,12 @@ namespace TqkLibrary.WpfUi.Converters
             else
                 return (Enum)Enum.ToObject(a.GetType(), Convert.ToUInt64(a) | Convert.ToUInt64(b));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public static Enum And(this Enum a, Enum b)
         {
             // consider adding argument validation here
@@ -72,7 +89,11 @@ namespace TqkLibrary.WpfUi.Converters
             else
                 return (Enum)Enum.ToObject(a.GetType(), Convert.ToUInt64(a) & Convert.ToUInt64(b));
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static Enum Not(this Enum a)
         {
             // consider adding argument validation here
