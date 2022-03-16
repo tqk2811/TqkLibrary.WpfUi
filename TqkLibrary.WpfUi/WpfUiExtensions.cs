@@ -10,6 +10,9 @@ using System.Drawing;
 
 namespace TqkLibrary.WpfUi
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class WpfUiExtensions
     {
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
@@ -103,37 +106,7 @@ namespace TqkLibrary.WpfUi
             return result;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-
-        public static readonly string[] unit_size = { "Byte", "Kib", "Mib", "Gib", "Tib" };
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly string[] unit_speed = { "Byte/s", "Kib/s", "Mib/s", "Gib/s", "Tib/s" };
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="num"></param>
-        /// <param name="round"></param>
-        /// <param name="units"></param>
-        /// <param name="div"></param>
-        /// <returns></returns>
-        public static string ConvertSize(double num, int round, string[] units, int div = 1024)
-        {
-            if (num == 0) return "0 " + units[0];
-            for (double i = 0; i < units.Length; i++)
-            {
-                double sizeitem = num / Math.Pow(div, i);
-                if (sizeitem < 1 && sizeitem > -1)
-                {
-                    if (i == 0) return "0 " + units[0];
-                    else return Math.Round((num / Math.Pow(div, i - 1)), round).ToString() + " " + units[(int)i - 1];
-                }
-            }
-            return Math.Round(num / Math.Pow(div, units.Length - 1), round).ToString() + " " + units[units.Length - 1];
-        }
+       
 
         /// <summary>
         /// 
@@ -146,43 +119,6 @@ namespace TqkLibrary.WpfUi
             var enumType = value.GetType();
             var name = Enum.GetName(enumType, value);
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
-        }
-
-
-
-        private static Random rd = new Random();
-        private const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private const string charsAndNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private const string Nums = "0123456789";
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="lengthMin"></param>
-        /// <param name="lengthMax"></param>
-        /// <returns></returns>
-        public static string RandomString(int lengthMin, int lengthMax)
-        {
-            return new string(Enumerable.Repeat(chars, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="lengthMin"></param>
-        /// <param name="lengthMax"></param>
-        /// <returns></returns>
-        public static string RandomNumber(int lengthMin, int lengthMax)
-        {
-            return new string(Enumerable.Repeat(Nums, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="lengthMin"></param>
-        /// <param name="lengthMax"></param>
-        /// <returns></returns>
-        public static string RandomStringAndNum(int lengthMin, int lengthMax)
-        {
-            return new string(Enumerable.Repeat(charsAndNum, rd.Next(lengthMin, lengthMax)).Select(s => s[rd.Next(s.Length)]).ToArray());
         }
     }
 }
