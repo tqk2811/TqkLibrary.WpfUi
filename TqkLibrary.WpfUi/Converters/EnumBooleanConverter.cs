@@ -5,9 +5,9 @@ using System.Windows.Data;
 namespace TqkLibrary.WpfUi.Converters
 {
     /// <summary>
-    /// enum is equal (value & parameter) -> true else false
+    /// enum is equal (value &amp; parameter) -> true else false
     /// </summary>
-    [ValueConversion(typeof(Enum), typeof(Enum))]
+    [ValueConversion(typeof(Enum), typeof(bool))]
     public class EnumBooleanConverter : IValueConverter
     {
         /// <summary>
@@ -27,9 +27,13 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns>bool</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            this.CurrentValue = (Enum)value;
-            if (IsAttributeFlag) return CurrentValue.HasFlag(parameter as Enum);// ((mask & target) != 0);
-            else return CurrentValue.Equals(parameter as Enum);
+            if(value is Enum e)
+            {
+                this.CurrentValue = e;
+                if (IsAttributeFlag) return CurrentValue.HasFlag(parameter as Enum);// ((mask & target) != 0);
+                else return CurrentValue.Equals(parameter as Enum);
+            }
+            return false;            
         }
 
         /// <summary>

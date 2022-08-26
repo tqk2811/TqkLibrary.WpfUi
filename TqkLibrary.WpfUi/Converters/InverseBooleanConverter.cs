@@ -6,9 +6,17 @@ namespace TqkLibrary.WpfUi.Converters
     /// <summary>
     /// 
     /// </summary>
-    [ValueConversion(typeof(bool), typeof(bool))]
+    [ValueConversion(typeof(bool), typeof(bool?))]
     public class InverseBooleanConverter : IValueConverter
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool? DefaultOnNull { get; set; } = null;
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool? DefaultOnNonBool { get; set; } = null;
         /// <summary>
         /// 
         /// </summary>
@@ -20,9 +28,17 @@ namespace TqkLibrary.WpfUi.Converters
         /// <exception cref="InvalidOperationException"></exception>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (targetType != typeof(bool) && targetType != typeof(bool?)) throw new InvalidOperationException("The target must be a bool or bool?");
-            if (value == null) return true;
-            return !(bool)value;
+            if (value == null) return DefaultOnNull;
+            if (value is bool b)
+            {
+                return !b;
+            }
+            else if (value is bool?)
+            {
+                bool? nb = (bool?)value;
+                return nb.HasValue ? !nb.Value : DefaultOnNull;
+            }
+            else return DefaultOnNonBool;
         }
 
         /// <summary>
@@ -36,9 +52,17 @@ namespace TqkLibrary.WpfUi.Converters
         /// <exception cref="InvalidOperationException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (targetType != typeof(bool) && targetType != typeof(bool?)) throw new InvalidOperationException("The target must be a bool or bool?");
-            if (value == null) return true;
-            return !(bool)value;
+            if (value == null) return DefaultOnNull;
+            if (value is bool b)
+            {
+                return !b;
+            }
+            else if (value is bool?)
+            {
+                bool? nb = (bool?)value;
+                return nb.HasValue ? !nb.Value : DefaultOnNull;
+            }
+            else return DefaultOnNonBool;
         }
     }
 }

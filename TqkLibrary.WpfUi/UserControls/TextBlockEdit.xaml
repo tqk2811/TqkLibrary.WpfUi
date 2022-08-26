@@ -6,15 +6,11 @@
              xmlns:local="clr-namespace:TqkLibrary.WpfUi.UserControls"
              xmlns:Converters="clr-namespace:TqkLibrary.WpfUi.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d"             
-             Height="auto" Width="auto"
-             x:Name="root" 
-             Focusable="True"
-             Loaded="root_Loaded"
-             d:DesignWidth="60" d:DesignHeight="20">
+             mc:Ignorable="d"
+             x:Name="root">
     <UserControl.Resources>
         <Converters:BooleanToVisibleConverter x:Key="TrueToVisibleConverter"/>
-        <Converters:BooleanToVisibleConverter x:Key="FalseToVisibleConverter" IsReversed="True"/>
+        <Converters:BooleanToVisibleConverter x:Key="FalseToVisibleConverter" IsReversedBool="True"/>
     </UserControl.Resources>
     <Grid>
         <Grid.Style>

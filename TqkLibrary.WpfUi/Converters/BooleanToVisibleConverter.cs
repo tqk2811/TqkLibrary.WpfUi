@@ -13,13 +13,30 @@ namespace TqkLibrary.WpfUi.Converters
     public class BooleanToVisibleConverter : IValueConverter
     {
         /// <summary>
-        /// 
+        /// Visible
         /// </summary>
-        public Visibility VisibilityType { get; set; } = Visibility.Collapsed;
+        public Visibility DefaultOnNull { get; set; } = Visibility.Visible;
+
+        /// <summary>
+        /// Visible
+        /// </summary>
+        public Visibility DefaultOnNonBool { get; set; } = Visibility.Visible;
+
+        /// <summary>
+        /// Collapsed
+        /// </summary>
+        public Visibility VisibilityTypeOnFalse { get; set; } = Visibility.Collapsed;
+
+        /// <summary>
+        /// Visible
+        /// </summary>
+        public Visibility VisibilityTypeOnTrue { get; set; } = Visibility.Visible;
+
         /// <summary>
         /// 
         /// </summary>
-        public bool IsReversed { get; set; } = false;
+        public bool IsReversedBool { get; set; } = false;
+
         /// <summary>
         /// 
         /// </summary>
@@ -30,10 +47,20 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            bool val = (bool)value;//
-            if (this.IsReversed) val = !val;
-            if (val) return Visibility.Visible;
-            else return VisibilityType;
+            if (value == null) return DefaultOnNull;
+            if (value is bool b)
+            {
+                if (this.IsReversedBool) b = !b;
+                return b ? VisibilityTypeOnTrue : VisibilityTypeOnFalse;
+            }
+            else if (value is bool?)
+            {
+                bool? nb = value as bool?;
+                if (!nb.HasValue) return DefaultOnNull;
+                if (this.IsReversedBool) nb = !nb.Value;
+                return nb.Value ? VisibilityTypeOnTrue : VisibilityTypeOnFalse;
+            }
+            return DefaultOnNonBool;
         }
         /// <summary>
         /// 
@@ -46,7 +73,15 @@ namespace TqkLibrary.WpfUi.Converters
         /// <exception cref="NotImplementedException"></exception>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (value != null)
+            {
+                if (value is Visibility visibility)
+                {
+                    if (visibility == VisibilityTypeOnTrue) return IsReversedBool ? false : true;
+                    if (visibility == VisibilityTypeOnFalse) return IsReversedBool ? true : false;
+                }
+            }
+            return false;
         }
     }
 }

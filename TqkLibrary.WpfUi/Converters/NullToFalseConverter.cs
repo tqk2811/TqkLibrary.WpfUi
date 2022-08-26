@@ -25,7 +25,7 @@ namespace TqkLibrary.WpfUi.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             bool val = value != null;//
-            if (val) return value;
+            if (val) return val;
             else return Result;
         }
         /// <summary>

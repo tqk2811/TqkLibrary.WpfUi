@@ -59,8 +59,12 @@ namespace TqkLibrary.WpfUi.ObservableCollection
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        using StreamWriter sw = new StreamWriter(path, true);
-                        sw.WriteLine(item.ToString());
+                        try
+                        {
+                            using StreamWriter sw = new StreamWriter(path, true);
+                            sw.WriteLine(item.ToString());
+                        }
+                        catch { }
                     });
                 }
             }

@@ -10,7 +10,7 @@ using System.Windows.Data;
 namespace TqkLibrary.WpfUi.Converters
 {
     /// <summary>
-    /// enum is equal (value & parameter) -> Visible else VisibilityType
+    /// enum is equal (value &amp; parameter) -> Visible else VisibilityType
     /// </summary>
     [ValueConversion(typeof(Enum), typeof(Visibility))]
     public class EnumToVisibleConverter : IValueConverter
