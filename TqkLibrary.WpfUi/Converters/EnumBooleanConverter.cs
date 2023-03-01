@@ -16,7 +16,7 @@ namespace TqkLibrary.WpfUi.Converters
         public bool IsAttributeFlag { get; set; } = true;
 
         private Enum CurrentValue;
-
+        ulong CurrentUlongValue = 0;
         /// <summary>
         /// enum -> bool
         /// </summary>
@@ -27,13 +27,19 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns>bool</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is Enum e)
+            if (value is Enum e && parameter is Enum p)
             {
                 this.CurrentValue = e;
-                if (IsAttributeFlag) return CurrentValue.HasFlag(parameter as Enum);// ((mask & target) != 0);
-                else return CurrentValue.Equals(parameter as Enum);
+                if (IsAttributeFlag) return CurrentValue.HasFlag(p);// ((mask & target) != 0);
+                else return CurrentValue.Equals(p);
             }
-            return false;            
+            else if (value.GetType().IsValueType && parameter.GetType().IsValueType)
+            {
+                CurrentUlongValue = System.Convert.ToUInt64(value);
+                if (IsAttributeFlag) return (CurrentUlongValue & System.Convert.ToUInt64(parameter)) != 0;
+                else return CurrentUlongValue == System.Convert.ToUInt64(parameter);
+            }
+            return false;
         }
 
         /// <summary>
@@ -46,18 +52,35 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (IsAttributeFlag)
+            if (parameter is Enum par)
             {
-                var par = parameter as Enum;
-                if ((bool)value) CurrentValue = CurrentValue.Or(par);
-                else CurrentValue = CurrentValue.And(par.Not());
-                return CurrentValue;
+                if (IsAttributeFlag)
+                {
+                    if ((bool)value) CurrentValue = CurrentValue.Or(par);
+                    else CurrentValue = CurrentValue.And(par.Not());
+                    return CurrentValue;
+                }
+                else
+                {
+                    if ((bool)value) return parameter;
+                    else return CurrentValue;
+                }
             }
             else
             {
-                if ((bool)value) return parameter;
-                else return CurrentValue;
+                if (IsAttributeFlag)
+                {
+                    if ((bool)value) CurrentUlongValue |= System.Convert.ToUInt64(parameter);
+                    else CurrentUlongValue &= ~System.Convert.ToUInt64(parameter);
+                    return CurrentUlongValue;
+                }
+                else
+                {
+                    if ((bool)value) return parameter;
+                    else return CurrentUlongValue;
+                }
             }
+
         }
     }
     /// <summary>
