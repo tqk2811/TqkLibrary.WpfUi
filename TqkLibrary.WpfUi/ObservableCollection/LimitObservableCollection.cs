@@ -39,6 +39,11 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// 
         /// </summary>
         public bool IsInsertTop { get; set; } = true;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsExportToFile { get; set; } = true;
         
         /// <summary>
         /// 
@@ -52,7 +57,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void InsertItem(int index, T item)
         {
             if (this.Count == Limit) base.RemoveAt(IsInsertTop ? this.Count - 1 : 0);
-            if (LogPath != null)
+            if (LogPath != null && IsExportToFile)
             {
                 string path = LogPath.Invoke();
                 if (!string.IsNullOrEmpty(path))
