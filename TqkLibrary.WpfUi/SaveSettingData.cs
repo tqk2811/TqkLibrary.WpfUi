@@ -18,6 +18,10 @@ namespace TqkLibrary.WpfUi
         public T Setting { get; private set; }
         private readonly string SavePath;
         private readonly Timer timer;
+        /// <summary>
+        /// 
+        /// </summary>
+        public event Action<T> OnSaved;
 
         /// <summary>
         /// 
@@ -46,6 +50,7 @@ namespace TqkLibrary.WpfUi
             {
 
             }
+            OnSaved?.Invoke(Setting);
         }
 
         /// <summary>
