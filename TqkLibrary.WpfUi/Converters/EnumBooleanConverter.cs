@@ -13,6 +13,10 @@ namespace TqkLibrary.WpfUi.Converters
         /// <summary>
         /// 
         /// </summary>
+        public UInt64 UncheckNonAttributeFlag { get; set; } = 0;
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsAttributeFlag { get; set; } = true;
 
         private Enum CurrentValue;
@@ -63,7 +67,7 @@ namespace TqkLibrary.WpfUi.Converters
                 else
                 {
                     if ((bool)value) return parameter;
-                    else return CurrentValue;
+                    else return (Enum)Enum.ToObject(targetType, UncheckNonAttributeFlag);
                 }
             }
             else
@@ -77,7 +81,7 @@ namespace TqkLibrary.WpfUi.Converters
                 else
                 {
                     if ((bool)value) return parameter;
-                    else return CurrentUlongValue;
+                    else return UncheckNonAttributeFlag;
                 }
             }
 
