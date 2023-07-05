@@ -12,19 +12,27 @@ namespace TqkLibrary.WpfUi.UserControls
         /// <summary>
         /// 
         /// </summary>
+        public static readonly DependencyProperty IsEditingOnLMouseDownProperty = DependencyProperty.Register(
+            nameof(IsEditingOnLMouseDown),
+            typeof(bool),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register(
-          nameof(IsEditing),
-          typeof(bool),
-          typeof(TextBlockEdit),
-          new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            nameof(IsEditing),
+            typeof(bool),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         /// <summary>
         /// 
         /// </summary>
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-          nameof(Text),
-          typeof(string),
-          typeof(TextBlockEdit),
-          new FrameworkPropertyMetadata(nameof(TextBlockEdit), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            nameof(Text),
+            typeof(string),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(nameof(TextBlockEdit), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 
         //public static readonly DependencyProperty FontFamilyProperty;
@@ -34,6 +42,15 @@ namespace TqkLibrary.WpfUi.UserControls
         //public static readonly DependencyProperty FontSizeProperty;
         //public static readonly DependencyProperty ForegroundProperty;
         //public static readonly DependencyProperty BackgroundProperty;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsEditingOnLMouseDown
+        {
+            get { return (bool)GetValue(IsEditingOnLMouseDownProperty); }
+            set { SetValue(IsEditingOnLMouseDownProperty, value); }
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -200,6 +217,14 @@ namespace TqkLibrary.WpfUi.UserControls
             {
                 Keyboard.ClearFocus();
                 IsEditing = false;
+            }
+        }
+
+        private void root_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && IsEditingOnLMouseDown)
+            {
+                IsEditing = true;
             }
         }
     }
