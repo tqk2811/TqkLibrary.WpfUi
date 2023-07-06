@@ -49,7 +49,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void ClearItems()
         {
             if (Dispatcher.CheckAccess()) base.ClearItems();
-            else Dispatcher.Invoke(() => base.ClearItems());
+            else Dispatcher.InvokeAsync(() => base.ClearItems());
         }
         /// <summary>
         /// 
@@ -59,7 +59,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void InsertItem(int index, T item)
         {
             if (Dispatcher.CheckAccess()) base.InsertItem(index, item);
-            else Dispatcher.Invoke(() => base.InsertItem(ReCalcIndexInsert(index), item));
+            else Dispatcher.InvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
         }
         /// <summary>
         /// 
@@ -69,7 +69,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void MoveItem(int oldIndex, int newIndex)
         {
             if (Dispatcher.CheckAccess()) base.MoveItem(oldIndex, newIndex);
-            else Dispatcher.Invoke(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
+            else Dispatcher.InvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
         }
         /// <summary>
         /// 
@@ -78,7 +78,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void RemoveItem(int index)
         {
             if (Dispatcher.CheckAccess()) base.RemoveItem(index);
-            else Dispatcher.Invoke(() => base.RemoveItem(ReCalcIndexRemove(index)));
+            else Dispatcher.InvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
         }
         /// <summary>
         /// 
@@ -88,7 +88,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected override void SetItem(int index, T item)
         {
             if (Dispatcher.CheckAccess()) base.SetItem(index, item);
-            else Dispatcher.Invoke(() => base.SetItem(ReCalcIndexRemove(index), item));
+            else Dispatcher.InvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
         }
 
         int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));
