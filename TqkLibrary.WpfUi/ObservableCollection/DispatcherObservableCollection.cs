@@ -47,8 +47,14 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         {
             this.Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             this.SynchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
-            base.CollectionChanged += this.CollectionChanged;
+            base.CollectionChanged += DispatcherObservableCollection_CollectionChanged;
         }
+
+        private void DispatcherObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.CollectionChanged?.Invoke(sender, e);
+        }
+
         /// <summary>
         /// 
         /// </summary>
