@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -17,6 +18,10 @@ namespace TqkLibrary.WpfUi.ObservableCollection
     /// <typeparam name="T"></typeparam>
     public class DispatcherObservableCollection<T> : ObservableCollection<T>
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        public override event NotifyCollectionChangedEventHandler CollectionChanged;
         /// <summary>
         /// 
         /// </summary>
@@ -42,14 +47,19 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         {
             this.Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             this.SynchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
+            base.CollectionChanged += this.CollectionChanged;
         }
         /// <summary>
         /// 
         /// </summary>
         protected override void ClearItems()
         {
-            if (Dispatcher.CheckAccess()) base.ClearItems();
-            else Dispatcher.InvokeAsync(() => base.ClearItems());
+            Dispatcher.InvokeAsync(() =>
+            {
+                var tmp = this.ToList();
+                base.ClearItems();
+                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, null, tmp));
+            });
         }
         /// <summary>
         /// 
@@ -58,8 +68,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void InsertItem(int index, T item)
         {
-            if (Dispatcher.CheckAccess()) base.InsertItem(index, item);
-            else Dispatcher.InvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
+            Dispatcher.InvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
         }
         /// <summary>
         /// 
@@ -68,8 +77,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="newIndex"></param>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            if (Dispatcher.CheckAccess()) base.MoveItem(oldIndex, newIndex);
-            else Dispatcher.InvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
+            Dispatcher.InvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
         }
         /// <summary>
         /// 
@@ -77,8 +85,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="index"></param>
         protected override void RemoveItem(int index)
         {
-            if (Dispatcher.CheckAccess()) base.RemoveItem(index);
-            else Dispatcher.InvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
+            Dispatcher.InvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
         }
         /// <summary>
         /// 
@@ -87,8 +94,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void SetItem(int index, T item)
         {
-            if (Dispatcher.CheckAccess()) base.SetItem(index, item);
-            else Dispatcher.InvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
+            Dispatcher.InvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
         }
 
         int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));
