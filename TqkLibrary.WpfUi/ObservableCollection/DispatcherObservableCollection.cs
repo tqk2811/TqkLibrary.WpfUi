@@ -21,7 +21,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <summary>
         /// 
         /// </summary>
-        public override event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event Action<IEnumerable<T>> OnItemsCleared;
         /// <summary>
         /// 
         /// </summary>
@@ -47,12 +47,6 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         {
             this.Dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
             this.SynchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
-            base.CollectionChanged += DispatcherObservableCollection_CollectionChanged;
-        }
-
-        private void DispatcherObservableCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            this.CollectionChanged?.Invoke(sender, e);
         }
 
         /// <summary>
@@ -60,11 +54,11 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// </summary>
         protected override void ClearItems()
         {
-            Dispatcher.InvokeAsync(() =>
+            Dispatcher.TrueThreadInvoke(() =>
             {
                 var tmp = this.ToList();
                 base.ClearItems();
-                CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset, null, tmp));
+                OnItemsCleared?.Invoke(tmp);
             });
         }
         /// <summary>
@@ -74,7 +68,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void InsertItem(int index, T item)
         {
-            Dispatcher.InvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
+            Dispatcher.TrueThreadInvoke(() => base.InsertItem(ReCalcIndexInsert(index), item));
         }
         /// <summary>
         /// 
@@ -83,7 +77,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="newIndex"></param>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            Dispatcher.InvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
+            Dispatcher.TrueThreadInvoke(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
         }
         /// <summary>
         /// 
@@ -91,7 +85,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="index"></param>
         protected override void RemoveItem(int index)
         {
-            Dispatcher.InvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
+            Dispatcher.TrueThreadInvoke(() => base.RemoveItem(ReCalcIndexRemove(index)));
         }
         /// <summary>
         /// 
@@ -100,7 +94,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void SetItem(int index, T item)
         {
-            Dispatcher.InvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
+            Dispatcher.TrueThreadInvoke(() => base.SetItem(ReCalcIndexRemove(index), item));
         }
 
         int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));
