@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Drawing;
+using System.Windows.Threading;
 
 namespace TqkLibrary.WpfUi
 {
@@ -119,6 +120,19 @@ namespace TqkLibrary.WpfUi
             var enumType = value.GetType();
             var name = Enum.GetName(enumType, value);
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dispatcher"></param>
+        /// <param name="action"></param>
+        public static void TrueThreadInvoke(this Dispatcher dispatcher, Action action)
+        {
+            if(dispatcher.CheckAccess())
+                action.Invoke();
+            else
+                dispatcher.InvokeAsync(action);
         }
     }
 }
