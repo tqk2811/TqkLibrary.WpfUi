@@ -54,7 +54,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// </summary>
         protected override void ClearItems()
         {
-            Dispatcher.TrueThreadInvoke(() =>
+            _ = Dispatcher.TrueThreadInvokeAsync(() =>
             {
                 var tmp = this.ToList();
                 base.ClearItems();
@@ -68,7 +68,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void InsertItem(int index, T item)
         {
-            Dispatcher.TrueThreadInvoke(() => base.InsertItem(ReCalcIndexInsert(index), item));
+            _ = Dispatcher.TrueThreadInvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
         }
         /// <summary>
         /// 
@@ -77,7 +77,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="newIndex"></param>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
-            Dispatcher.TrueThreadInvoke(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
+            _ = Dispatcher.TrueThreadInvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
         }
         /// <summary>
         /// 
@@ -85,7 +85,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="index"></param>
         protected override void RemoveItem(int index)
         {
-            Dispatcher.TrueThreadInvoke(() => base.RemoveItem(ReCalcIndexRemove(index)));
+            _ = Dispatcher.TrueThreadInvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
         }
         /// <summary>
         /// 
@@ -94,7 +94,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="item"></param>
         protected override void SetItem(int index, T item)
         {
-            Dispatcher.TrueThreadInvoke(() => base.SetItem(ReCalcIndexRemove(index), item));
+            _ = Dispatcher.TrueThreadInvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
         }
 
         int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));

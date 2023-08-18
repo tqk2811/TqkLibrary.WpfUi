@@ -8,6 +8,8 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using System.Windows.Threading;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace TqkLibrary.WpfUi
 {
@@ -107,7 +109,7 @@ namespace TqkLibrary.WpfUi
             return result;
         }
 
-       
+
 
         /// <summary>
         /// 
@@ -127,12 +129,111 @@ namespace TqkLibrary.WpfUi
         /// </summary>
         /// <param name="dispatcher"></param>
         /// <param name="action"></param>
-        public static void TrueThreadInvoke(this Dispatcher dispatcher, Action action)
+        /// <returns></returns>
+        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action)
         {
-            if(dispatcher.CheckAccess())
+            if (dispatcher.CheckAccess())
+            {
                 action.Invoke();
+            }
             else
-                dispatcher.InvokeAsync(action);
+            {
+                await dispatcher.InvokeAsync(action);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dispatcher"></param>
+        /// <param name="action"></param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                action.Invoke();
+            }
+            else
+            {
+                await dispatcher.InvokeAsync(action, priority);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dispatcher"></param>
+        /// <param name="action"></param>
+        /// <param name="priority"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority, CancellationToken cancellationToken)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                action.Invoke();
+            }
+            else
+            {
+                await dispatcher.InvokeAsync(action, priority, cancellationToken);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dispatcher"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                return func.Invoke();
+            }
+            else
+            {
+                return await dispatcher.InvokeAsync<T>(func);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dispatcher"></param>
+        /// <param name="func"></param>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                return func.Invoke();
+            }
+            else
+            {
+                return await dispatcher.InvokeAsync<T>(func, priority);
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dispatcher"></param>
+        /// <param name="func"></param>
+        /// <param name="priority"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority, CancellationToken cancellationToken)
+        {
+            if (dispatcher.CheckAccess())
+            {
+                return func.Invoke();
+            }
+            else
+            {
+                return await dispatcher.InvokeAsync<T>(func, priority, cancellationToken);
+            }
         }
     }
 }
