@@ -33,15 +33,14 @@ namespace TqkLibrary.WpfUi.UserControls
             typeof(string),
             typeof(TextBlockEdit),
             new FrameworkPropertyMetadata(nameof(TextBlockEdit), FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-
-
-        //public static readonly DependencyProperty FontFamilyProperty;
-        //public static readonly DependencyProperty FontStyleProperty;
-        //public static readonly DependencyProperty FontWeightProperty;
-        //public static readonly DependencyProperty FontStretchProperty;
-        //public static readonly DependencyProperty FontSizeProperty;
-        //public static readonly DependencyProperty ForegroundProperty;
-        //public static readonly DependencyProperty BackgroundProperty;
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DependencyProperty TextAlignmentProperty = DependencyProperty.Register(
+            nameof(TextAlignment),
+            typeof(TextAlignment),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(TextAlignment.Left, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// 
@@ -69,108 +68,14 @@ namespace TqkLibrary.WpfUi.UserControls
             set { SetValue(TextProperty, value); }
         }
 
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new FontFamily FontFamily
-        //{
-        //    get
-        //    {
-        //        return (FontFamily)GetValue(FontFamilyProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(FontFamilyProperty, value);
-        //    }
-        //}
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new FontStyle FontStyle
-        //{
-        //    get
-        //    {
-        //        return (FontStyle)GetValue(FontStyleProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(FontStyleProperty, value);
-        //    }
-        //}
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new FontWeight FontWeight
-        //{
-        //    get
-        //    {
-        //        return (FontWeight)GetValue(FontWeightProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(FontWeightProperty, value);
-        //    }
-        //}
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new FontStretch FontStretch
-        //{
-        //    get
-        //    {
-        //        return (FontStretch)GetValue(FontStretchProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(FontStretchProperty, value);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new double FontSize
-        //{
-        //    get
-        //    {
-        //        return (double)GetValue(FontSizeProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(FontSizeProperty, value);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new Brush Foreground
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(ForegroundProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(ForegroundProperty, value);
-        //    }
-        //}
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        //public new Brush Background
-        //{
-        //    get
-        //    {
-        //        return (Brush)GetValue(BackgroundProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(BackgroundProperty, value);
-        //    }
-        //}
+        /// <summary>
+        /// 
+        /// </summary>
+        public TextAlignment TextAlignment
+        {
+            get { return (TextAlignment)GetValue(TextAlignmentProperty); }
+            set { SetValue(TextAlignmentProperty, value); }
+        }
 
 
 
