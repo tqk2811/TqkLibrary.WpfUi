@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -99,5 +100,24 @@ namespace TqkLibrary.WpfUi.ObservableCollection
 
         int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));
         int ReCalcIndexRemove(int index) => Math.Max(0, Math.Min(index, this.Count - 1));
+
+        /// <summary>
+        /// Sync this collection with datas
+        /// </summary>
+        /// <param name="datas"></param>
+        public virtual void Sync(IEnumerable<T> datas)
+        {
+            var news = datas.Except(this).ToList();
+            var deleteds = this.Except(datas).ToList();
+
+            news.ForEach(x => this.Add(x));
+            deleteds.ForEach(x => this.Remove(x));
+        }
+        /// <summary>
+        /// Sync this collection with datas
+        /// </summary>
+        /// <param name="datas"></param>
+        public virtual Task SyncAsync(IEnumerable<T> datas) => Dispatcher.TrueThreadInvokeAsync(() => Sync(datas));
+
     }
 }
