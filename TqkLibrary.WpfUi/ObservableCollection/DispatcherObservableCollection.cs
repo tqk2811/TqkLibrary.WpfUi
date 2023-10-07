@@ -102,6 +102,40 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         int ReCalcIndexRemove(int index) => Math.Max(0, Math.Min(index, this.Count - 1));
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task AddAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Add(item));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public Task ClearAsync() => this.Dispatcher.TrueThreadInvokeAsync(() => this.Clear());
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task InsertAsync(int index, T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Insert(index, item));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task<bool> RemoveAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Remove(item));
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public Task RemoveAtAsync(int index) => this.Dispatcher.TrueThreadInvokeAsync(() => this.RemoveAt(index));
+
+
+
+
+        /// <summary>
         /// Sync this collection with datas
         /// </summary>
         /// <param name="datas"></param>
