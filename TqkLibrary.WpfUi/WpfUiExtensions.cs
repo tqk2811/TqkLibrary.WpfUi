@@ -132,6 +132,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (action is null) throw new ArgumentNullException(nameof(action));
             if (dispatcher.CheckAccess())
             {
                 action.Invoke();
@@ -150,6 +152,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (action is null) throw new ArgumentNullException(nameof(action));
             if (dispatcher.CheckAccess())
             {
                 action.Invoke();
@@ -169,6 +173,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority, CancellationToken cancellationToken)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (action is null) throw new ArgumentNullException(nameof(action));
             if (dispatcher.CheckAccess())
             {
                 action.Invoke();
@@ -187,6 +193,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (func is null) throw new ArgumentNullException(nameof(func));
             if (dispatcher.CheckAccess())
             {
                 return func.Invoke();
@@ -206,6 +214,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (func is null) throw new ArgumentNullException(nameof(func));
             if (dispatcher.CheckAccess())
             {
                 return func.Invoke();
@@ -226,6 +236,8 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority, CancellationToken cancellationToken)
         {
+            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
+            if (func is null) throw new ArgumentNullException(nameof(func));
             if (dispatcher.CheckAccess())
             {
                 return func.Invoke();
