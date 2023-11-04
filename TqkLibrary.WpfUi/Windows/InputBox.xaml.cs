@@ -28,57 +28,71 @@ namespace TqkLibrary.WpfUi.Windows
         public string ErrorTitle { get; set; } = "Error";
     }
     /// <summary>
+    /// 
+    /// </summary>
+    public interface IInputBox
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        string Text { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
+        TextAlignment TextAlignment { get; set; }
+    }
+
+    internal class InputBoxVM : BaseViewModel, IInputBox
+    {
+        string _Text = string.Empty;
+        public string Text
+        {
+            get { return _Text; }
+            set { _Text = value; NotifyPropertyChange(); }
+        }
+
+        TextAlignment _TextAlignment = TextAlignment.Left;
+        public TextAlignment TextAlignment
+        {
+            get { return _TextAlignment; }
+            set { _TextAlignment = value; NotifyPropertyChange(); }
+        }
+    }
+    /// <summary>
     /// Interaction logic for InputBox.xaml
     /// </summary>
-    public partial class InputBox : Window
+    public partial class InputBox : Window, IInputBox
     {
         /// <summary>
         /// 
         /// </summary>
         public event ValidateEventHandler Validate;
 
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-            nameof(Text),
-            typeof(string),
-            typeof(InputBox),
-            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly DependencyProperty TextAlignmentProperty = DependencyProperty.Register(
-            nameof(TextAlignment),
-            typeof(TextAlignment),
-            typeof(InputBox),
-            new FrameworkPropertyMetadata(TextAlignment.Left, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         /// <summary>
         /// 
         /// </summary>
         public TextAlignment TextAlignment
         {
-            get { return (TextAlignment)GetValue(TextAlignmentProperty); }
-            set { SetValue(TextAlignmentProperty, value); }
+            get { return inputBoxVM.TextAlignment; }
+            set { inputBoxVM.TextAlignment = value; }
         }
         /// <summary>
         /// 
         /// </summary>
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get { return inputBoxVM.Text; }
+            set { inputBoxVM.Text = value; }
         }
 
-
+        readonly InputBoxVM inputBoxVM;
         /// <summary>
         /// 
         /// </summary>
         public InputBox()
         {
             InitializeComponent();
+            this.inputBoxVM = this.DataContext as InputBoxVM;
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)

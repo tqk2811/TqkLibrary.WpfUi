@@ -4,8 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TqkLibrary.WpfUi.Windows"
+        x:Name="root"
         mc:Ignorable="d" Loaded="Window_Loaded"
         Title="Input Box" Height="112" Width="234" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <local:InputBoxVM/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -13,8 +17,8 @@
         </Grid.RowDefinitions>
         <TextBox x:Name="Tb" Margin="10,10,10,10" 
                  TextWrapping="Wrap" 
-                 TextAlignment="{Binding TextAlignment,RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                 Text="{Binding Text,RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                 TextAlignment="{Binding TextAlignment}" 
+                 Text="{Binding Text}" 
                  VerticalAlignment="Stretch" 
                  KeyDown="Tb_KeyDown"/>
         
