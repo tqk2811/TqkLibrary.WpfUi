@@ -7,9 +7,18 @@
         mc:Ignorable="d" Loaded="Window_Loaded"
         Title="Input Box" Height="112" Width="234" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid>
-        <TextBox x:Name="Tb" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" TextAlignment="Center" Text="TextBox" VerticalAlignment="Top" KeyDown="Tb_KeyDown"/>
-        <Button x:Name="Add" Content="Thêm" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Height="20" VerticalAlignment="Bottom" Click="Add_Click"/>
-        <Button x:Name="Cancel" Content="Cancel" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Cancel_Click"/>
-
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <TextBox x:Name="Tb" Margin="10,10,10,10" 
+                 TextWrapping="Wrap" 
+                 TextAlignment="{Binding TextAlignment,RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                 Text="{Binding Text,RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                 VerticalAlignment="Stretch" 
+                 KeyDown="Tb_KeyDown"/>
+        
+        <Button x:Name="Add" Grid.Row="1" Content="Thêm" HorizontalAlignment="Left" Margin="10,0,0,10" Width="75" Height="20" VerticalAlignment="Bottom" Click="Add_Click"/>
+        <Button x:Name="Cancel" Grid.Row="1" Content="Cancel" Margin="0,0,10,10" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="75" Click="Cancel_Click"/>
     </Grid>
 </Window>
