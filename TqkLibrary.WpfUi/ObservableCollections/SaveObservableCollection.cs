@@ -8,9 +8,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     /// <summary>
     /// 
@@ -32,35 +33,68 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <param name="datas"></param>
         /// <param name="func"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public void Load(IEnumerable<TData> datas, Func<TData, TViewModel> func)
+        public virtual void Load(IEnumerable<TData> datas, Func<TData, TViewModel> func)
         {
             if (datas is null) throw new ArgumentNullException(nameof(datas));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
-            IsLoaded = false;
-            try
+            using var l = GetLockLoader();
+            this.Clear();
+            foreach (var item in datas)
             {
-                this.Clear();
-                foreach(var item in datas)
-                {
-                    this.Add(func(item));
-                }
-            }
-            finally
-            {
-                IsLoaded = true;
+                this.Add(func(item));
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="datas"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public virtual async Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
+        {
+            if (datas is null) throw new ArgumentNullException(nameof(datas));
+            if (func is null) throw new ArgumentNullException(nameof(func));
 
-        private bool IsLoaded = false;
+            using var l = GetLockLoader();
+            await this.ClearAsync();
+            foreach (var item in datas)
+            {
+                await this.AddAsync(func(item));
+            }
+        }
 
         /// <summary>
         /// 
         /// </summary>
-        public void Save()
+        protected bool IsLoaded => _lockCount == 0;
+
+        private int _lockCount = 0;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        protected IDisposable GetLockLoader()
         {
-            this.OnSave?.Invoke(this.Select(x => x.Data));
+            return new LockHelper(this);
         }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual void Save()
+            => TriggerEventSave(this.Select(x => x.Data));
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="datas"></param>
+        protected virtual void TriggerEventSave(IEnumerable<TData> datas)
+            => this.OnSave?.Invoke(datas);
+
 
         #region ObservableCollection
         /// <summary>
@@ -113,6 +147,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
 
         #endregion ObservableCollection
 
+
         private void ItemData_Change(object obj, TData data)
         {
             Save();
@@ -124,6 +159,27 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         protected void NotifyPropertyChange([CallerMemberName] string name = "")
         {
             OnPropertyChanged(new PropertyChangedEventArgs(name));
+        }
+
+
+
+        private class LockHelper : IDisposable
+        {
+            readonly SaveObservableCollection<TData, TViewModel> _collection;
+            public LockHelper(SaveObservableCollection<TData, TViewModel> collection)
+            {
+                this._collection = collection ?? throw new ArgumentNullException(nameof(collection));
+                Interlocked.Increment(ref _collection._lockCount);
+            }
+            ~LockHelper()
+            {
+                Interlocked.Decrement(ref _collection._lockCount);
+            }
+            public void Dispose()
+            {
+                Interlocked.Decrement(ref _collection._lockCount);
+                GC.SuppressFinalize(this);
+            }
         }
     }
 }

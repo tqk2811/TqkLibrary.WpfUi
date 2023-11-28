@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     /// <summary>
     /// 
@@ -34,7 +34,7 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// <summary>
         /// 
         /// </summary>
-        public DispatcherObservableCollection() : this(Application.Current.Dispatcher, SynchronizationContext.Current)
+        public DispatcherObservableCollection() : this(Application.Current.Dispatcher, SynchronizationContext.Current)//will create on main thread
         {
 
         }
@@ -55,82 +55,40 @@ namespace TqkLibrary.WpfUi.ObservableCollection
         /// </summary>
         protected override void ClearItems()
         {
-            _ = Dispatcher.TrueThreadInvokeAsync(() =>
-            {
-                var tmp = this.ToList();
-                base.ClearItems();
-                OnItemsCleared?.Invoke(tmp);
-            });
+            var tmp = this.ToList();
+            base.ClearItems();
+            OnItemsCleared?.Invoke(tmp);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        protected override void InsertItem(int index, T item)
-        {
-            _ = Dispatcher.TrueThreadInvokeAsync(() => base.InsertItem(ReCalcIndexInsert(index), item));
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="oldIndex"></param>
-        /// <param name="newIndex"></param>
-        protected override void MoveItem(int oldIndex, int newIndex)
-        {
-            _ = Dispatcher.TrueThreadInvokeAsync(() => base.MoveItem(ReCalcIndexRemove(oldIndex), ReCalcIndexInsert(newIndex)));
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        protected override void RemoveItem(int index)
-        {
-            _ = Dispatcher.TrueThreadInvokeAsync(() => base.RemoveItem(ReCalcIndexRemove(index)));
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        protected override void SetItem(int index, T item)
-        {
-            _ = Dispatcher.TrueThreadInvokeAsync(() => base.SetItem(ReCalcIndexRemove(index), item));
-        }
-
-        int ReCalcIndexInsert(int index) => Math.Max(0, Math.Min(index, this.Count));
-        int ReCalcIndexRemove(int index) => Math.Max(0, Math.Min(index, this.Count - 1));
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task AddAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Add(item));
+        public virtual Task AddAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Add(item));
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task ClearAsync() => this.Dispatcher.TrueThreadInvokeAsync(() => this.Clear());
+        public virtual Task ClearAsync() => this.Dispatcher.TrueThreadInvokeAsync(() => this.Clear());
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task InsertAsync(int index, T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Insert(index, item));
+        public virtual Task InsertAsync(int index, T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Insert(index, item));
         /// <summary>
         /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task<bool> RemoveAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Remove(item));
+        public virtual Task<bool> RemoveAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Remove(item));
         /// <summary>
         /// 
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Task RemoveAtAsync(int index) => this.Dispatcher.TrueThreadInvokeAsync(() => this.RemoveAt(index));
+        public virtual Task RemoveAtAsync(int index) => this.Dispatcher.TrueThreadInvokeAsync(() => this.RemoveAt(index));
 
 
 

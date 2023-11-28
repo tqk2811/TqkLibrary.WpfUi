@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     /// <summary>
     /// Derived VirtualizatingCollection, performing loading asychronously.

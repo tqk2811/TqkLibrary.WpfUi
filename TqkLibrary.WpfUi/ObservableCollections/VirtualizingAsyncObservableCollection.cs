@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     public class VirtualizingAsyncObservableCollection<T> : DispatcherObservableCollection<T>, IList
     {

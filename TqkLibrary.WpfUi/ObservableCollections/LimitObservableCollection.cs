@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     /// <summary>
     /// 

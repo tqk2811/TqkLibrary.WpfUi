@@ -49,7 +49,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.WpfUi.ObservableCollection
+namespace TqkLibrary.WpfUi.ObservableCollections
 {
     /// <summary>
     /// Specialized list implementation that provides data virtualization. The collection is divided up into pages,
