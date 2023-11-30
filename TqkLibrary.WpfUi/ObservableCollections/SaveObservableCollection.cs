@@ -38,6 +38,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (datas is null) throw new ArgumentNullException(nameof(datas));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
+            this.Dispatcher.VerifyAccess();
+
             using var l = GetLockLoader();
             this.Clear();
             foreach (var item in datas)
@@ -52,18 +54,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="func"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public virtual async Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
-        {
-            if (datas is null) throw new ArgumentNullException(nameof(datas));
-            if (func is null) throw new ArgumentNullException(nameof(func));
-
-            using var l = GetLockLoader();
-            await this.ClearAsync();
-            foreach (var item in datas)
-            {
-                await this.AddAsync(func(item));
-            }
-        }
+        public virtual Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
+            => this.Dispatcher.TrueThreadInvokeAsync(() => Load(datas, func));
 
         /// <summary>
         /// 
@@ -77,6 +69,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <returns></returns>
         protected IDisposable GetLockLoader()
         {
+            this.Dispatcher.VerifyAccess();
             return new LockHelper(this);
         }
 
