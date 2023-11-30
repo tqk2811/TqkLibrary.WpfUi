@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {
@@ -16,28 +17,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
       where TData : class, IItemData<TId>
       where TViewModel : class, IViewModel<TData>
     {
-        readonly Dictionary<TId, List<TViewModel>> _dict_datas = new Dictionary<TId, List<TViewModel>>();
-
-        List<TViewModel> _EnsureCreateDictKey(TId key)
-        {
-            this.Dispatcher.VerifyAccess();
-            if (!_dict_datas.ContainsKey(key))
-                _dict_datas.Add(key, new List<TViewModel>());
-            return _dict_datas[key];
-        }
-        void _CleanEmptyDict()
-        {
-            this.Dispatcher.VerifyAccess();
-            foreach (var pair in _dict_datas.Where(x => x.Value.Count == 0).ToList())
-            {
-                _dict_datas.Remove(pair.Key);
-            }
-        }
+        readonly List<TViewModel> _datas = new List<TViewModel>();
 
         /// <summary>
         /// 
         /// </summary>
-        public IEnumerable<TViewModel> ViewModels => _dict_datas.SelectMany(x => x.Value);
+        public IReadOnlyList<TViewModel> ViewModels => _datas;
 
         /// <summary>
         /// 
@@ -59,10 +44,10 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (func is null) throw new ArgumentNullException(nameof(func));
             this.Dispatcher.VerifyAccess();
 
-            _dict_datas.Clear();
+            _datas.Clear();
             foreach (var data in datas)
             {
-                _EnsureCreateDictKey(data.GroupId).Add(func(data));
+                _datas.Add(func(data));
             }
         }
 
@@ -88,7 +73,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
             using var l = GetLockLoader();
             this.Clear();
-            foreach (var data in _dict_datas.SelectMany(x => x.Value))
+            foreach (var data in _datas)
             {
                 if (func(data))
                     this.Add(data);
@@ -123,7 +108,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         public override void Save()
         {
-            TriggerEventSave(_dict_datas.SelectMany(x => x.Value).Select(x => x.Data));
+            TriggerEventSave(_datas.Select(x => x.Data));
         }
 
         /// <summary>
@@ -138,21 +123,28 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
             if (this.IsLoaded)
             {
-                var datas = _EnsureCreateDictKey(item.Data.GroupId);
-
-                if (this.GroupBy(x => x.Data.GroupId).Count() == 1 &&
+                var currentGroup = this.GroupBy(x => x.Data.GroupId);
+                if (currentGroup.Count() == 1 &&
                     this.First().Data.GroupId?.Equals(item.Data.GroupId) == true)
                 {
                     //all items same group
+                    var targetInsert = currentGroup.First().Skip(0).FirstOrDefault();
+                    if (targetInsert is null)
+                    {
+                        //add to last 
+                        _datas.Add(item);
+                    }
+                    else
+                    {
+                        int data_insert_index = _datas.IndexOf(targetInsert);
+                        _datas.Insert(data_insert_index, item);
+                    }
                     base.InsertItem(index, item);
-
-                    datas.Clear();
-                    datas.AddRange(this);
                 }
                 else
                 {
                     //search mode, just add to last
-                    datas.Add(item);
+                    _datas.Add(item);
                 }
             }
             else
@@ -169,16 +161,20 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="newIndex"></param>
         protected override void MoveItem(int oldIndex, int newIndex)
         {
+            if (oldIndex == newIndex) return;
+            this.Dispatcher.VerifyAccess();
             if (this.IsLoaded)
             {
                 if (this.GroupBy(x => x.Data.GroupId).Count() == 1)
                 {
                     //all same group
-                    base.MoveItem(oldIndex, newIndex);
+                    var old = this[oldIndex];
+                    var @new = this[newIndex];
+                    var new_data_index = _datas.IndexOf(@new);
+                    _datas.Remove(old);
+                    _datas.Insert(new_data_index, old);
 
-                    var datas = _EnsureCreateDictKey(this.First().Data.GroupId);
-                    datas.Clear();
-                    datas.AddRange(this);
+                    base.MoveItem(oldIndex, newIndex);
                 }
                 else
                 {
@@ -190,7 +186,6 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 //loading
                 base.MoveItem(oldIndex, newIndex);
             }
-            _CleanEmptyDict();
         }
 
         /// <summary>
@@ -199,31 +194,17 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="index"></param>
         protected override void RemoveItem(int index)
         {
+            this.Dispatcher.VerifyAccess();
             if (this.IsLoaded)
             {
-                if (this.GroupBy(x => x.Data.GroupId).Count() == 1)
-                {
-                    var datas = _EnsureCreateDictKey(this.First().Data.GroupId);
-                    //all same group
-                    base.RemoveItem(index);//maybe last items
-
-                    datas.Clear();
-                    datas.AddRange(this);
-                }
-                else
-                {
-                    //search mode
-                    var datas = _EnsureCreateDictKey(this[index].Data.GroupId);
-                    datas.Remove(this[index]);
-                    base.RemoveItem(index);
-                }
+                _datas.Remove(this[index]);
+                base.RemoveItem(index);
             }
             else
             {
                 //loading
                 base.RemoveItem(index);
             }
-            _CleanEmptyDict();
         }
 
         /// <summary>
@@ -233,18 +214,19 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="item"></param>
         protected override void SetItem(int index, TViewModel item)
         {
+            this.Dispatcher.VerifyAccess();
             if (this.IsLoaded)
             {
-                var datas = _EnsureCreateDictKey(item.Data.GroupId);
+                var oldItem = this[index];
+                int index_data_oldItem = _datas.IndexOf(oldItem);
+                _datas.Remove(oldItem);
+                _datas.Insert(index_data_oldItem, item);
 
                 if (this.GroupBy(x => x.Data.GroupId).Count() == 1 &&
                     this.First().Data.GroupId?.Equals(item.Data.GroupId) == true)
                 {
                     //all same group
                     base.SetItem(index, item);
-
-                    datas.Clear();
-                    datas.AddRange(this);
                 }
                 else
                 {
@@ -256,7 +238,6 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 //loading
                 base.SetItem(index, item);
             }
-            _CleanEmptyDict();
         }
 
         /// <summary>
@@ -264,31 +245,19 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         protected override void ClearItems()
         {
+            this.Dispatcher.VerifyAccess();
             if (this.IsLoaded)
             {
-                if (this.GroupBy(x => x.Data.GroupId).Count() == 1)
+                foreach (var item in this)
                 {
-                    //all same group
-                    var datas = _EnsureCreateDictKey(this.First().Data.GroupId);
-                    datas.Clear();
-                    base.ClearItems();
+                    _datas.Remove(item);
                 }
-                else
-                {
-                    //search mode
-                    foreach (var item in this)
-                    {
-                        var datas = _EnsureCreateDictKey(item.Data.GroupId);
-                        datas.Remove(item);
-                    }
-                    base.ClearItems();
-                }
+                base.ClearItems();
             }
             else
             {
                 base.ClearItems();
             }
-            _CleanEmptyDict();
         }
     }
 }
