@@ -26,6 +26,16 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
+        public event Action<T> OnItemAdded;
+        /// <summary>
+        /// 
+        /// </summary>
+        public event Action<T> OnItemRemoved;
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         public SynchronizationContext SynchronizationContext { get; }
         /// <summary>
         /// 
@@ -53,10 +63,60 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="e"></param>
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
+        {
+            base.OnCollectionChanged(e);
+            switch (e.Action)
+            {
+                case NotifyCollectionChangedAction.Add:
+                    if (e.NewItems is not null && OnItemAdded is not null)
+                    {
+                        foreach (var item in e.NewItems.OfType<T>())
+                        {
+                            OnItemAdded?.Invoke(item);
+                        }
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Remove:
+                    if (e.OldItems is not null && OnItemRemoved is not null)
+                    {
+                        foreach (var item in e.OldItems.OfType<T>())
+                        {
+                            OnItemRemoved?.Invoke(item);
+                        }
+                    }
+                    break;
+
+                case NotifyCollectionChangedAction.Replace:
+                    if (e.NewItems is not null && OnItemAdded is not null)
+                    {
+                        foreach (var item in e.NewItems.OfType<T>())
+                        {
+                            OnItemAdded?.Invoke(item);
+                        }
+                    }
+                    if (e.OldItems is not null && OnItemRemoved is not null)
+                    {
+                        foreach (var item in e.OldItems.OfType<T>())
+                        {
+                            OnItemRemoved?.Invoke(item);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected override void ClearItems()
         {
             var tmp = this.ToList();
             base.ClearItems();
+            if (OnItemRemoved is not null)
+                tmp.ForEach(x => this.OnItemRemoved?.Invoke(x));
             OnItemsCleared?.Invoke(tmp);
         }
         /// <summary>
