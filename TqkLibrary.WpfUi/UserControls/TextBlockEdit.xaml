@@ -7,8 +7,6 @@
              xmlns:Converters="clr-namespace:TqkLibrary.WpfUi.Converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" MouseDown="root_MouseDown"
-             Background="Transparent"
-             Foreground="Black"
              x:Name="root">
     <UserControl.Resources>
         <Converters:BooleanToVisibleConverter x:Key="TrueToVisibleConverter"/>
@@ -18,33 +16,35 @@
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsEditing,RelativeSource={RelativeSource AncestorType=UserControl}}" Value="True">
+                    <DataTrigger Binding="{Binding IsEditing,ElementName=root}" Value="True">
                         <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=tb_name}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <TextBlock Text="{Binding Text,RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                   TextAlignment="{Binding TextAlignment,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontFamily="{Binding FontFamily,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontSize="{Binding FontSize,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontWeight="{Binding FontWeight,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontStyle="{Binding FontStyle,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontStretch="{Binding FontStretch,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Background="{Binding Background,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Visibility="{Binding IsEditing,RelativeSource={RelativeSource AncestorType=UserControl},Converter={StaticResource FalseToVisibleConverter}}"/>
+        <TextBlock Text="{Binding Text,ElementName=root}" 
+                   TextAlignment="{Binding TextAlignment,ElementName=root}"
+                   FontFamily="{Binding FontFamily,ElementName=root}"
+                   FontSize="{Binding FontSize,ElementName=root}"
+                   FontWeight="{Binding FontWeight,ElementName=root}"
+                   FontStyle="{Binding FontStyle,ElementName=root}"
+                   FontStretch="{Binding FontStretch,ElementName=root}"
+                   Background="{Binding Background,ElementName=root}"
+                   Foreground="{Binding Foreground,ElementName=root}"
+                   Visibility="{Binding IsEditing,ElementName=root,Converter={StaticResource FalseToVisibleConverter}}"/>
 
-        <TextBox x:Name="tb_name" Text="{Binding Text,RelativeSource={RelativeSource AncestorType=UserControl}}" 
-                   TextAlignment="{Binding TextAlignment,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontFamily="{Binding FontFamily,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontSize="{Binding FontSize,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontWeight="{Binding FontWeight,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontStyle="{Binding FontStyle,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   FontStretch="{Binding FontStretch,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Background="{Binding Background,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                   Foreground="{Binding Foreground,RelativeSource={RelativeSource AncestorType=UserControl}}"
-                 Visibility="{Binding IsEditing,RelativeSource={RelativeSource AncestorType=UserControl},Converter={StaticResource TrueToVisibleConverter}}"
+        <TextBox x:Name="tb_name" Text="{Binding Text,ElementName=root}" 
+                   TextAlignment="{Binding TextAlignment,ElementName=root}"
+                   FontFamily="{Binding FontFamily,ElementName=root}"
+                   FontSize="{Binding FontSize,ElementName=root}"
+                   FontWeight="{Binding FontWeight,ElementName=root}"
+                   FontStyle="{Binding FontStyle,ElementName=root}"
+                   FontStretch="{Binding FontStretch,ElementName=root}"
+                   Background="{Binding Background,ElementName=root}"
+                   Foreground="{Binding Foreground,ElementName=root}"
+                 Visibility="{Binding IsEditing,ElementName=root,Converter={StaticResource TrueToVisibleConverter}}"
+                 AcceptsReturn="{Binding AcceptsReturn,ElementName=root}"
+                 AcceptsTab="{Binding AcceptsTab,ElementName=root}"
                  GotFocus="tb_name_GotFocus" LostFocus="tb_name_LostFocus" KeyDown="tb_name_KeyDown"/>
     </Grid>
 </UserControl>

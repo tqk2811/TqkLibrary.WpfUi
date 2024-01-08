@@ -28,6 +28,14 @@ namespace TqkLibrary.WpfUi.UserControls
         /// <summary>
         /// 
         /// </summary>
+        public static readonly DependencyProperty IsSellectAllOnEditingProperty = DependencyProperty.Register(
+            nameof(IsSellectAllOnEditing),
+            typeof(bool),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(true, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
             nameof(Text),
             typeof(string),
@@ -41,6 +49,22 @@ namespace TqkLibrary.WpfUi.UserControls
             typeof(TextAlignment),
             typeof(TextBlockEdit),
             new FrameworkPropertyMetadata(TextAlignment.Left, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DependencyProperty AcceptsReturnProperty = DependencyProperty.Register(
+            nameof(AcceptsReturn),
+            typeof(bool),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly DependencyProperty AcceptsTabProperty = DependencyProperty.Register(
+            nameof(AcceptsTab),
+            typeof(bool),
+            typeof(TextBlockEdit),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
         /// <summary>
         /// 
@@ -57,6 +81,14 @@ namespace TqkLibrary.WpfUi.UserControls
         {
             get { return (bool)GetValue(IsEditingProperty); }
             set { SetValue(IsEditingProperty, value); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool IsSellectAllOnEditing
+        {
+            get { return (bool)GetValue(IsSellectAllOnEditingProperty); }
+            set { SetValue(IsSellectAllOnEditingProperty, value); }
         }
 
         /// <summary>
@@ -77,7 +109,22 @@ namespace TqkLibrary.WpfUi.UserControls
             set { SetValue(TextAlignmentProperty, value); }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AcceptsReturn
+        {
+            get { return (bool)GetValue(AcceptsReturnProperty); }
+            set { SetValue(AcceptsReturnProperty, value); }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        public bool AcceptsTab
+        {
+            get { return (bool)GetValue(AcceptsTabProperty); }
+            set { SetValue(AcceptsTabProperty, value); }
+        }
 
         /// <summary>
         /// 
@@ -87,18 +134,6 @@ namespace TqkLibrary.WpfUi.UserControls
             InitializeComponent();
         }
 
-        private void root_Loaded(object sender, RoutedEventArgs e)
-        {
-            Window window = Window.GetWindow(this);
-            if (window != null) //fix design
-                window.MouseDown += Window_MouseDown;
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            this.Focus();
-        }
-
         private void tb_name_GotFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = sender as TextBox;
@@ -106,7 +141,7 @@ namespace TqkLibrary.WpfUi.UserControls
                 new Action(delegate ()
                 {
                     Keyboard.Focus(textBox);
-                    textBox.SelectAll();
+                    if(IsSellectAllOnEditing) textBox.SelectAll();
                 }));
         }
 
