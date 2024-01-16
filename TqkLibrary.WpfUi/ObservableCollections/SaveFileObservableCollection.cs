@@ -34,12 +34,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         /// <param name="savePath"></param>
         /// <param name="func"></param>
-        public SaveFileObservableCollection(string savePath, Func<TData, TViewModel> func)
+        /// <param name="jsonSerializerSettings"></param>
+        public SaveFileObservableCollection(string savePath, Func<TData, TViewModel> func, JsonSerializerSettings jsonSerializerSettings = null)
         {
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
-            _saveJsonData = new SaveJsonData<List<TData>>(savePath);
+            _saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
             base.Load(_saveJsonData.Data, func);
             base.OnSave += SaveFileObservableCollection_OnSave;
         }
