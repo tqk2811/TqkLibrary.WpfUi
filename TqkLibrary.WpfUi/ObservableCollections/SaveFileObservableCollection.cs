@@ -62,12 +62,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         private void SaveFileObservableCollection_OnSave(IEnumerable<TData> datas)
         {
-            _saveJsonData.Data.Clear();
-            _saveJsonData.Data.AddRange(datas);
-            if (IsAutoSave)
+            this.Dispatcher.InvokeAsync(() =>
             {
-                _saveJsonData.TriggerSave();
-            }
+                _saveJsonData.Data.Clear();
+                _saveJsonData.Data.AddRange(datas);
+                if (IsAutoSave)
+                {
+                    _saveJsonData.TriggerSave();
+                }
+            });
         }
     }
 }
