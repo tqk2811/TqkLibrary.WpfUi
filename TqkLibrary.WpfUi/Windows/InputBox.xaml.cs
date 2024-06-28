@@ -66,7 +66,7 @@ namespace TqkLibrary.WpfUi.Windows
         /// <summary>
         /// 
         /// </summary>
-        public event ValidateEventHandler Validate;
+        public event ValidateEventHandler? Validate;
 
         /// <summary>
         /// 
@@ -92,10 +92,10 @@ namespace TqkLibrary.WpfUi.Windows
         public InputBox()
         {
             InitializeComponent();
-            this.inputBoxVM = this.DataContext as InputBoxVM;
+            this.inputBoxVM = this.DataContext as InputBoxVM ?? throw new InvalidOperationException();
         }
 
-        private void Add_Click(object sender, RoutedEventArgs e)
+        private void Add_Click(object? sender, RoutedEventArgs? e)
         {
             if (Validate is not null)
             {

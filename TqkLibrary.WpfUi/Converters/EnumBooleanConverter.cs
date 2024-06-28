@@ -19,7 +19,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// </summary>
         public bool IsAttributeFlag { get; set; } = true;
 
-        private Enum CurrentValue;
+        private Enum? CurrentValue;
         ulong CurrentUlongValue = 0;
         /// <summary>
         /// enum -> bool
@@ -56,6 +56,9 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (CurrentValue is null) 
+                throw new InvalidOperationException($"Need call {nameof(Convert)} first");
+
             if (parameter is Enum par)
             {
                 if (IsAttributeFlag)

@@ -26,7 +26,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// <param name="culture"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return DefaultOnNull;
             if (value is bool b)
@@ -50,7 +50,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// <param name="culture"></param>
         /// <returns></returns>
         /// <exception cref="InvalidOperationException"></exception>
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return DefaultOnNull;
             if (value is bool b)

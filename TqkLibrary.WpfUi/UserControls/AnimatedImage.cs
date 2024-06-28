@@ -57,11 +57,11 @@ namespace TqkLibrary.WpfUi.UserControls
         {
             ClearAnimation();
 
-            BitmapImage lBitmapImage = aEventArgs.NewValue as BitmapImage;
+            BitmapImage? lBitmapImage = aEventArgs.NewValue as BitmapImage;
 
             if (lBitmapImage == null)
             {
-                ImageSource lImageSource = aEventArgs.NewValue as ImageSource;
+                ImageSource? lImageSource = aEventArgs.NewValue as ImageSource;
                 base.Source = lImageSource;
                 return;
             }
@@ -79,8 +79,8 @@ namespace TqkLibrary.WpfUi.UserControls
 
         #region Private properties
 
-        private Int32Animation Animation { get; set; }
-        private GifBitmapDecoder Decoder { get; set; }
+        private Int32Animation? Animation { get; set; }
+        private GifBitmapDecoder? Decoder { get; set; }
 
         #endregion
 
@@ -100,7 +100,7 @@ namespace TqkLibrary.WpfUi.UserControls
 
         private void PrepareAnimation(BitmapImage aBitmapImage)
         {
-            Debug.Assert(aBitmapImage != null);
+            if(aBitmapImage is null) throw new ArgumentNullException(nameof(aBitmapImage));
 
             if (aBitmapImage.UriSource != null)
             {
@@ -140,7 +140,7 @@ namespace TqkLibrary.WpfUi.UserControls
 
         private bool IsAnimatedGifImage(BitmapImage aBitmapImage)
         {
-            Debug.Assert(aBitmapImage != null);
+            if (aBitmapImage is null) throw new ArgumentNullException(nameof(aBitmapImage));
 
             bool lResult = false;
             if (aBitmapImage.UriSource != null)
@@ -175,10 +175,9 @@ namespace TqkLibrary.WpfUi.UserControls
             return lResult;
         }
 
-        private static void ChangingFrameIndex
-            (DependencyObject aObject, DependencyPropertyChangedEventArgs aEventArgs)
+        private static void ChangingFrameIndex(DependencyObject aObject, DependencyPropertyChangedEventArgs aEventArgs)
         {
-            AnimatedImage lAnimatedImage = aObject as AnimatedImage;
+            AnimatedImage? lAnimatedImage = aObject as AnimatedImage;
 
             if (lAnimatedImage == null || !lAnimatedImage.IsAnimationWorking)
             {
@@ -186,7 +185,7 @@ namespace TqkLibrary.WpfUi.UserControls
             }
 
             int lFrameIndex = (int)aEventArgs.NewValue;
-            ((Image)lAnimatedImage).Source = lAnimatedImage.Decoder.Frames[lFrameIndex];
+            ((Image)lAnimatedImage).Source = lAnimatedImage.Decoder?.Frames[lFrameIndex];
             lAnimatedImage.InvalidateVisual();
         }
 

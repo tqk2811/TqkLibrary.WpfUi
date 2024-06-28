@@ -25,7 +25,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public event Action<IEnumerable<TData>> OnSave;
+        public event Action<IEnumerable<TData>>? OnSave;
 
         /// <summary>
         /// 

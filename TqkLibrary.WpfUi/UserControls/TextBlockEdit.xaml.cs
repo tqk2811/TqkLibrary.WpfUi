@@ -136,13 +136,15 @@ namespace TqkLibrary.WpfUi.UserControls
 
         private void tb_name_GotFocus(object sender, RoutedEventArgs e)
         {
-            TextBox textBox = sender as TextBox;
-            Dispatcher.BeginInvoke(DispatcherPriority.Input,
-                new Action(delegate ()
+            TextBox? textBox = sender as TextBox;
+            if (textBox is not null)
+            {
+                Dispatcher.BeginInvoke(DispatcherPriority.Input,() =>
                 {
                     Keyboard.Focus(textBox);
-                    if(IsSellectAllOnEditing) textBox.SelectAll();
-                }));
+                    if (IsSellectAllOnEditing) textBox.SelectAll();
+                });
+            }
         }
 
         private void tb_name_LostFocus(object sender, RoutedEventArgs e)

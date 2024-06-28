@@ -102,12 +102,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         #endregion
 
         #region ItemsProvider
-        protected virtual void ItemsProvider_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        protected virtual void ItemsProvider_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
 
         }
-
-        protected virtual void ItemsProvider_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        protected virtual void ItemsProvider_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
 
         }
@@ -219,15 +218,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
                 // defensive check in case of async load
                 if (_pages[pageIndex] == null)
-                    return default(T);
+                    return default(T)!;
 
                 // return requested item
-                return _pages[pageIndex].Skip(pageOffset).FirstOrDefault();
+                return _pages[pageIndex].Skip(pageOffset).FirstOrDefault()!;
             }
             set { throw new NotSupportedException(); }
         }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get { return this[index]; }
             set { throw new NotSupportedException(); }
@@ -250,7 +249,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             for (int i = 0; i < Count; i++)
             {
-                yield return this[i];
+                yield return this[i]!;
             }
         }
 
@@ -281,7 +280,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             throw new NotSupportedException();
         }
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
             throw new NotSupportedException();
         }
@@ -290,9 +289,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         #region Contains
 
-        bool IList.Contains(object value)
+        bool IList.Contains(object? value)
         {
-            return Contains((T)value);
+            return Contains((T)value!);
         }
 
         /// <summary>
@@ -326,9 +325,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         #region IndexOf
 
-        int IList.IndexOf(object value)
+        int IList.IndexOf(object? value)
         {
-            return IndexOf((T)value);
+            return IndexOf((T)value!);
         }
 
         /// <summary>
@@ -363,9 +362,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             throw new NotSupportedException();
         }
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
-            Insert(index, (T)value);
+            Insert(index, (T)value!);
         }
 
         #endregion
@@ -387,7 +386,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             throw new NotSupportedException();
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             throw new NotSupportedException();
         }
@@ -538,7 +537,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             if (!_pages.ContainsKey(pageIndex))
             {
-                _pages.Add(pageIndex, null);
+                _pages.Add(pageIndex, new List<T>());
                 _pageTouchTimes.Add(pageIndex, DateTime.Now);
                 Trace.WriteLine("Added page: " + pageIndex);
                 LoadPage(pageIndex);

@@ -33,7 +33,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="savePath"></param>
         /// <param name="func"></param>
         /// <param name="jsonSerializerSettings"></param>
-        public SaveFileGroupObservableCollection(string savePath, Func<TData, TViewModel> func, JsonSerializerSettings jsonSerializerSettings = null)
+        public SaveFileGroupObservableCollection(string savePath, Func<TData, TViewModel> func, JsonSerializerSettings? jsonSerializerSettings = null)
         {
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));

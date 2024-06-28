@@ -13,7 +13,7 @@ namespace TqkLibrary.WpfUi.Converters
     /// </summary>
     internal class StringFormatter : IMultiValueConverter
     {
-        string StringFormat = string.Empty;
+        string? _stringFormat = null;
         /// <summary>
         /// 
         /// </summary>
@@ -22,14 +22,14 @@ namespace TqkLibrary.WpfUi.Converters
         /// <param name="parameter"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object?[]? values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values != null && values.Length > 1 && values[0] != null && values[1] is string format)
             {
-                if (string.IsNullOrEmpty(format)) return values[0].ToString();
+                if (string.IsNullOrEmpty(format)) return values[0]?.ToString();
                 else
                 {
-                    StringFormat = format;
+                    _stringFormat = format;
                     if (values[0] is double _double) return _double.ToString(format);
                     return string.Format(format, values[0]);
                 }
@@ -44,9 +44,9 @@ namespace TqkLibrary.WpfUi.Converters
         /// <param name="parameter"></param>
         /// <param name="culture"></param>
         /// <returns></returns>
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        public object?[] ConvertBack(object? value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            return new object[] { value, StringFormat };
+            return new object?[] { value, _stringFormat };
         }
     }
 }

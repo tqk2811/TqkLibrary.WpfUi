@@ -46,7 +46,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="backupDir"></param>
         /// <param name="func"></param>
         /// <param name="jsonSerializerSettings"></param>
-        public SaveFileBackupObservableCollection(string savePath, string backupDir, Func<TData, TViewModel> func, JsonSerializerSettings jsonSerializerSettings = null)
+        public SaveFileBackupObservableCollection(string savePath, string backupDir, Func<TData, TViewModel> func, JsonSerializerSettings? jsonSerializerSettings = null)
         {
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));

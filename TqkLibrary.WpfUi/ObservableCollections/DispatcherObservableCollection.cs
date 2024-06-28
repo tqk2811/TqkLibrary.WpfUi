@@ -22,15 +22,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public event Action<IEnumerable<T>> OnItemsCleared;
+        public event Action<IEnumerable<T>>? OnItemsCleared;
         /// <summary>
         /// 
         /// </summary>
-        public event Action<T> OnItemAdded;
+        public event Action<T>? OnItemAdded;
         /// <summary>
         /// 
         /// </summary>
-        public event Action<T> OnItemRemoved;
+        public event Action<T>? OnItemRemoved;
 
 
         /// <summary>
@@ -44,7 +44,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public DispatcherObservableCollection() : this(Application.Current.Dispatcher, SynchronizationContext.Current)//will create on main thread
+        public DispatcherObservableCollection()
+            : this(
+                  Application.Current.Dispatcher,
+                  SynchronizationContext.Current ?? throw new InvalidOperationException("Must create in main thread")
+                  )//will create on main thread
         {
 
         }

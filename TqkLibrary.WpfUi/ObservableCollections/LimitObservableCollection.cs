@@ -67,7 +67,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                         try
                         {
                             using StreamWriter sw = new StreamWriter(path, true);
-                            sw.WriteLine(item.ToString());
+                            sw.WriteLine(item?.ToString());
                         }
                         catch { }
                     });

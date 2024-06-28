@@ -24,7 +24,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider)
             : base(itemsProvider)
         {
-            _synchronizationContext = SynchronizationContext.Current;
+            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize)
             : base(itemsProvider, pageSize)
         {
-            _synchronizationContext = SynchronizationContext.Current;
+            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout)
             : base(itemsProvider, pageSize, pageTimeout)
         {
-            _synchronizationContext = SynchronizationContext.Current;
+            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// Occurs when the collection changes.
         /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged;
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         /// <summary>
         /// Raises the <see cref="E:CollectionChanged"/> event.
@@ -81,7 +81,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            NotifyCollectionChangedEventHandler h = CollectionChanged;
+            NotifyCollectionChangedEventHandler? h = CollectionChanged;
             if (h != null)
                 h(this, e);
         }
@@ -102,7 +102,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// Occurs when a property value changes.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Raises the <see cref="E:PropertyChanged"/> event.
@@ -110,7 +110,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            PropertyChangedEventHandler h = PropertyChanged;
+            PropertyChangedEventHandler? h = PropertyChanged;
             if (h != null)
                 h(this, e);
         }
@@ -171,19 +171,19 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// Performed on background thread.
         /// </summary>
         /// <param name="args">None required.</param>
-        private void LoadCountWork(object args)
+        private void LoadCountWork(object? args)
         {
             int count = FetchCount();
-            SynchronizationContext.Send(LoadCountCompleted, count);
+            SynchronizationContext?.Send(LoadCountCompleted, count);
         }
 
         /// <summary>
         /// Performed on UI-thread after LoadCountWork.
         /// </summary>
         /// <param name="args">Number of items returned.</param>
-        private void LoadCountCompleted(object args)
+        private void LoadCountCompleted(object? args)
         {
-            Count = (int)args;
+            Count = (int)args!;
             IsLoading = false;
             FireCollectionReset();
         }
@@ -202,20 +202,20 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// Performed on background thread.
         /// </summary>
         /// <param name="args">Index of the page to load.</param>
-        private void LoadPageWork(object args)
+        private void LoadPageWork(object? args)
         {
-            int pageIndex = (int)args;
+            int pageIndex = (int)args!;
             IList<T> page = FetchPage(pageIndex);
-            SynchronizationContext.Send(LoadPageCompleted, new object[] { pageIndex, page });
+            SynchronizationContext?.Send(LoadPageCompleted, new object[] { pageIndex, page });
         }
 
         /// <summary>
         /// Performed on UI-thread after LoadPageWork.
         /// </summary>
         /// <param name="args">object[] { int pageIndex, IList(T) page }</param>
-        private void LoadPageCompleted(object args)
+        private void LoadPageCompleted(object? args)
         {
-            int pageIndex = (int)((object[])args)[0];
+            int pageIndex = (int)((object[])args!)[0];
             IList<T> page = (IList<T>)((object[])args)[1];
 
             PopulatePage(pageIndex, page);
@@ -227,12 +227,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
 
 
-        protected override void ItemsProvider_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        protected override void ItemsProvider_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnCollectionChanged(e);
         }
 
-        protected override void ItemsProvider_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        protected override void ItemsProvider_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
 
         }

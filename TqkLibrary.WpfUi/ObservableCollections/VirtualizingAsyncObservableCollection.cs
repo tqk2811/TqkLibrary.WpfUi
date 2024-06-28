@@ -27,7 +27,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             private set { _isLoading = value; NotifyPropertyChange(); }
         }
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get { return this[index]; }
             set { throw new NotSupportedException(); }

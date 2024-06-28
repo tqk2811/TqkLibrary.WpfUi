@@ -82,7 +82,7 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static IEnumerable<T> RandomLoop<T>(this IEnumerable<T> input, int count, bool randomFirst = false)
         {
-            if (input == null || input.Count() <= 1) return input;
+            if (input == null || input.Count() <= 1) return input!;
             if (count <= 0) count = 1;
 
             Random random = new Random(DateTime.Now.Millisecond);
@@ -117,10 +117,12 @@ namespace TqkLibrary.WpfUi
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static TAttribute GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
+        public static TAttribute? GetAttribute<TAttribute>(this Enum value) where TAttribute : Attribute
         {
             var enumType = value.GetType();
-            var name = Enum.GetName(enumType, value);
+            string? name = Enum.GetName(enumType, value);
+            if(string.IsNullOrWhiteSpace(name))
+                return default(TAttribute);
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
         }
 
