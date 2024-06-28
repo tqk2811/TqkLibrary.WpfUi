@@ -140,9 +140,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         #endregion ObservableCollection
 
+        protected virtual void OnItemChanged(TData data)
+        {
 
+        }
         private void ItemData_Change(object obj, TData data)
         {
+            OnItemChanged(data);
             Save();
         }
         /// <summary>
