@@ -11,15 +11,15 @@
 		<license type="expression">MIT</license>
 		<dependencies>
 			<group targetFramework="net462">
-				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240627164445"/>
+				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240628151114"/>
 				<dependency id="System.Drawing.Common" version="6.0.0"/>
 			</group>
 			<group targetFramework="net6.0-windows7.0">
-				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240627164445"/>
+				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240628151114"/>
 				<dependency id="System.Drawing.Common" version="6.0.0"/>
 			</group>
 			<group targetFramework="net8.0-windows7.0">
-				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240627164445"/>
+				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240628151114"/>
 				<dependency id="System.Drawing.Common" version="6.0.0"/>
 			</group>
 		</dependencies>
