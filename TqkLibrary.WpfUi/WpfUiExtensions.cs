@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Windows.Threading;
 using System.Threading.Tasks;
 using System.Threading;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi
 {
@@ -18,6 +19,8 @@ namespace TqkLibrary.WpfUi
     /// </summary>
     public static class WpfUiExtensions
     {
+        #region ImageSource
+
         [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
         [return: MarshalAs(UnmanagedType.Bool)]
         internal static extern bool DeleteObject([In] IntPtr hObject);
@@ -37,6 +40,7 @@ namespace TqkLibrary.WpfUi
             }
             finally { DeleteObject(handle); }
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -54,6 +58,7 @@ namespace TqkLibrary.WpfUi
             bitmapimage.EndInit();
             return bitmapimage;
         }
+
         /// <summary>
         /// 
         /// </summary>
@@ -69,6 +74,8 @@ namespace TqkLibrary.WpfUi
             bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
             bitmapImage.EndInit();
         }
+
+        #endregion
 
 
 
@@ -109,8 +116,6 @@ namespace TqkLibrary.WpfUi
             return result;
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -121,59 +126,28 @@ namespace TqkLibrary.WpfUi
         {
             var enumType = value.GetType();
             string? name = Enum.GetName(enumType, value);
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
                 return default(TAttribute);
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dispatcher"></param>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action)
-        {
-            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
-            if (action is null) throw new ArgumentNullException(nameof(action));
-            if (dispatcher.CheckAccess())
-            {
-                action.Invoke();
-            }
-            else
-            {
-                await dispatcher.InvokeAsync(action);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dispatcher"></param>
-        /// <param name="action"></param>
-        /// <param name="priority"></param>
-        /// <returns></returns>
-        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority)
-        {
-            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
-            if (action is null) throw new ArgumentNullException(nameof(action));
-            if (dispatcher.CheckAccess())
-            {
-                action.Invoke();
-            }
-            else
-            {
-                await dispatcher.InvokeAsync(action, priority);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="dispatcher"></param>
-        /// <param name="action"></param>
-        /// <param name="priority"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async Task TrueThreadInvokeAsync(this Dispatcher dispatcher, Action action, DispatcherPriority priority, CancellationToken cancellationToken)
+
+
+        #region TrueThreadInvokeAsync
+
+        public static Task TrueThreadInvokeAsync(
+            this IMainThread mainThread,
+            Action action,
+            DispatcherPriority priority = DispatcherPriority.Normal,
+            CancellationToken cancellationToken = default
+            )
+            => mainThread.Dispatcher.TrueThreadInvokeAsync(action, priority, cancellationToken);
+        public static async Task TrueThreadInvokeAsync(
+            this Dispatcher dispatcher,
+            Action action,
+            DispatcherPriority priority = DispatcherPriority.Normal,
+            CancellationToken cancellationToken = default
+            )
         {
             if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
             if (action is null) throw new ArgumentNullException(nameof(action));
@@ -186,57 +160,20 @@ namespace TqkLibrary.WpfUi
                 await dispatcher.InvokeAsync(action, priority, cancellationToken);
             }
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dispatcher"></param>
-        /// <param name="func"></param>
-        /// <returns></returns>
-        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func)
-        {
-            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
-            if (func is null) throw new ArgumentNullException(nameof(func));
-            if (dispatcher.CheckAccess())
-            {
-                return func.Invoke();
-            }
-            else
-            {
-                return await dispatcher.InvokeAsync<T>(func);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dispatcher"></param>
-        /// <param name="func"></param>
-        /// <param name="priority"></param>
-        /// <returns></returns>
-        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority)
-        {
-            if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
-            if (func is null) throw new ArgumentNullException(nameof(func));
-            if (dispatcher.CheckAccess())
-            {
-                return func.Invoke();
-            }
-            else
-            {
-                return await dispatcher.InvokeAsync<T>(func, priority);
-            }
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dispatcher"></param>
-        /// <param name="func"></param>
-        /// <param name="priority"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns></returns>
-        public static async Task<T> TrueThreadInvokeAsync<T>(this Dispatcher dispatcher, Func<T> func, DispatcherPriority priority, CancellationToken cancellationToken)
+
+        public static Task<T> TrueThreadInvokeAsync<T>(
+            this IMainThread mainThread,
+            Func<T> func,
+            DispatcherPriority priority = DispatcherPriority.Normal,
+            CancellationToken cancellationToken = default
+            )
+            => mainThread.Dispatcher.TrueThreadInvokeAsync(func, priority, cancellationToken);
+        public static async Task<T> TrueThreadInvokeAsync<T>(
+            this Dispatcher dispatcher, 
+            Func<T> func, 
+            DispatcherPriority priority = DispatcherPriority.Normal, 
+            CancellationToken cancellationToken = default
+            )
         {
             if (dispatcher is null) throw new ArgumentNullException(nameof(dispatcher));
             if (func is null) throw new ArgumentNullException(nameof(func));
@@ -249,5 +186,24 @@ namespace TqkLibrary.WpfUi
                 return await dispatcher.InvokeAsync<T>(func, priority, cancellationToken);
             }
         }
+
+        #endregion
+
+
+
+        #region  ICollection<T>
+
+        public static Task AddAsync<T, TCollection>(this TCollection collection, T item) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Add(item));
+        public static Task ClearAsync<T, TCollection>(this TCollection collection) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Clear());
+        public static Task<bool> RemoveAsync<T, TCollection>(this TCollection collection, T item) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Remove(item));
+        public static Task InsertAsync<T, TList>(this TList list, int index, T item) where TList : IList<T>, IMainThread
+            => list.Dispatcher.TrueThreadInvokeAsync(() => list.Insert(index, item));
+        public static Task RemoveAtAsync<T, TList>(this TList list, int index) where TList : IList<T>, IMainThread
+            => list.Dispatcher.TrueThreadInvokeAsync(() => list.RemoveAt(index));
+
+        #endregion
     }
 }
