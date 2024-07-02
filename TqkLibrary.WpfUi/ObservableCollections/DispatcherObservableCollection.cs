@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
@@ -19,6 +20,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
     /// <typeparam name="T"></typeparam>
     public class DispatcherObservableCollection<T> : ObservableCollection<T>
     {
+        Cursor? _Cursor = null;
+        public virtual Cursor? Cursor
+        {
+            get { return _Cursor; }
+            set { _Cursor = value; OnPropertyChanged(nameof(Cursor)); }
+        }
         /// <summary>
         /// 
         /// </summary>
