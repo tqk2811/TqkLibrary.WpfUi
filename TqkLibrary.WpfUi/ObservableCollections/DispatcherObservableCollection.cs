@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {
@@ -19,7 +20,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DispatcherObservableCollection<T> : ObservableCollection<T>
+    public class DispatcherObservableCollection<T> : ObservableCollection<T>, IMainThread
     {
         Cursor? _Cursor = null;
         public virtual Cursor? Cursor
@@ -112,15 +113,6 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 tmp.ForEach(x => this.OnItemRemoved?.Invoke(x));
             OnItemsCleared?.Invoke(tmp);
         }
-
-
-        public virtual Task AddAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Add(item));
-        public virtual Task ClearAsync() => this.Dispatcher.TrueThreadInvokeAsync(() => this.Clear());
-        public virtual Task InsertAsync(int index, T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Insert(index, item));
-        public virtual Task<bool> RemoveAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Remove(item));
-        public virtual Task RemoveAtAsync(int index) => this.Dispatcher.TrueThreadInvokeAsync(() => this.RemoveAt(index));
-
-
 
 
         /// <summary>
