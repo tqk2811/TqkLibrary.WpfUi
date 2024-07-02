@@ -11,7 +11,7 @@
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IViewModel<T> where T : class
+    public interface IViewModel<T>
     {
         /// <summary>
         /// 
