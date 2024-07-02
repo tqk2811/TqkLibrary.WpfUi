@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TqkLibrary.WpfUi.ObservableCollections
+namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 {
     /// <summary>
     /// Derived VirtualizatingCollection, performing loading asychronously.
@@ -80,20 +80,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         /// <param name="e">The <see cref="System.Collections.Specialized.NotifyCollectionChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-        {
-            NotifyCollectionChangedEventHandler? h = CollectionChanged;
-            if (h != null)
-                h(this, e);
-        }
+            => CollectionChanged?.Invoke(this, e);
 
         /// <summary>
         /// Fires the collection reset event.
         /// </summary>
         private void FireCollectionReset()
-        {
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            OnCollectionChanged(e);
-        }
+            => OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
         #endregion
 
@@ -109,21 +102,14 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         /// <param name="e">The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> instance containing the event data.</param>
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e)
-        {
-            PropertyChangedEventHandler? h = PropertyChanged;
-            if (h != null)
-                h(this, e);
-        }
+            => PropertyChanged?.Invoke(this, e);
 
         /// <summary>
         /// Fires the property changed event.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         private void FirePropertyChanged(string propertyName)
-        {
-            PropertyChangedEventArgs e = new PropertyChangedEventArgs(propertyName);
-            OnPropertyChanged(e);
-        }
+            => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
         #endregion
 
@@ -149,7 +135,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 {
                     _isLoading = value;
                 }
-                FirePropertyChanged("IsLoading");
+                FirePropertyChanged(nameof(IsLoading));
             }
         }
 

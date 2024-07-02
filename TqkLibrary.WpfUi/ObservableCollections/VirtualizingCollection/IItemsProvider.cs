@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace TqkLibrary.WpfUi.ObservableCollections
+namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 {
     /// <summary>
     /// Represents a provider of collection details.
