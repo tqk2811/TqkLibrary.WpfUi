@@ -114,24 +114,5 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             OnItemsCleared?.Invoke(tmp);
         }
 
-
-        /// <summary>
-        /// Sync this collection with datas
-        /// </summary>
-        /// <param name="datas"></param>
-        public virtual void Sync(IEnumerable<T> datas)
-        {
-            var news = datas.Except(this).ToList();
-            var deleteds = this.Except(datas).ToList();
-
-            news.ForEach(x => this.Add(x));
-            deleteds.ForEach(x => this.Remove(x));
-        }
-        /// <summary>
-        /// Sync this collection with datas
-        /// </summary>
-        /// <param name="datas"></param>
-        public virtual Task SyncAsync(IEnumerable<T> datas) => Dispatcher.TrueThreadInvokeAsync(() => Sync(datas));
-
     }
 }

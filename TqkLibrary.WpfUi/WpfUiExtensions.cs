@@ -169,9 +169,9 @@ namespace TqkLibrary.WpfUi
             )
             => mainThread.Dispatcher.TrueThreadInvokeAsync(func, priority, cancellationToken);
         public static async Task<T> TrueThreadInvokeAsync<T>(
-            this Dispatcher dispatcher, 
-            Func<T> func, 
-            DispatcherPriority priority = DispatcherPriority.Normal, 
+            this Dispatcher dispatcher,
+            Func<T> func,
+            DispatcherPriority priority = DispatcherPriority.Normal,
             CancellationToken cancellationToken = default
             )
         {
@@ -203,6 +203,28 @@ namespace TqkLibrary.WpfUi
             => list.Dispatcher.TrueThreadInvokeAsync(() => list.Insert(index, item), cancellationToken: cancellationToken);
         public static Task RemoveAtAsync<T, TList>(this TList list, int index, CancellationToken cancellationToken = default) where TList : IList<T>, IMainThread
             => list.Dispatcher.TrueThreadInvokeAsync(() => list.RemoveAt(index), cancellationToken: cancellationToken);
+
+
+
+        /// <summary>
+        /// Sync this collection with datas
+        /// </summary>
+        /// <param name="datas"></param>
+        public static void Sync<T, TCollection>(this TCollection collection, IEnumerable<T> datas) where TCollection : ICollection<T>
+        {
+            var news = datas.Except(collection).ToList();
+            var deleteds = collection.Except(datas).ToList();
+
+            news.ForEach(x => collection.Add(x));
+            deleteds.ForEach(x => collection.Remove(x));
+        }
+        /// <summary>
+        /// Sync this collection with datas
+        /// </summary>
+        /// <param name="datas"></param>
+        public static Task SyncAsync<T, TCollection>(this TCollection collection, IEnumerable<T> datas, CancellationToken cancellationToken = default) where TCollection : ICollection<T>, IMainThread
+            => collection.TrueThreadInvokeAsync(() => collection.Sync(datas), cancellationToken: cancellationToken);
+
 
         #endregion
     }
