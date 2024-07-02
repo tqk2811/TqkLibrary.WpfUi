@@ -193,16 +193,16 @@ namespace TqkLibrary.WpfUi
 
         #region  ICollection<T>
 
-        public static Task AddAsync<T, TCollection>(this TCollection collection, T item) where TCollection : ICollection<T>, IMainThread
-            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Add(item));
-        public static Task ClearAsync<T, TCollection>(this TCollection collection) where TCollection : ICollection<T>, IMainThread
-            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Clear());
-        public static Task<bool> RemoveAsync<T, TCollection>(this TCollection collection, T item) where TCollection : ICollection<T>, IMainThread
-            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Remove(item));
-        public static Task InsertAsync<T, TList>(this TList list, int index, T item) where TList : IList<T>, IMainThread
-            => list.Dispatcher.TrueThreadInvokeAsync(() => list.Insert(index, item));
-        public static Task RemoveAtAsync<T, TList>(this TList list, int index) where TList : IList<T>, IMainThread
-            => list.Dispatcher.TrueThreadInvokeAsync(() => list.RemoveAt(index));
+        public static Task AddAsync<T, TCollection>(this TCollection collection, T item, CancellationToken cancellationToken = default) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Add(item), cancellationToken: cancellationToken);
+        public static Task ClearAsync<T, TCollection>(this TCollection collection, CancellationToken cancellationToken = default) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Clear(), cancellationToken: cancellationToken);
+        public static Task<bool> RemoveAsync<T, TCollection>(this TCollection collection, T item, CancellationToken cancellationToken = default) where TCollection : ICollection<T>, IMainThread
+            => collection.Dispatcher.TrueThreadInvokeAsync(() => collection.Remove(item), cancellationToken: cancellationToken);
+        public static Task InsertAsync<T, TList>(this TList list, int index, T item, CancellationToken cancellationToken = default) where TList : IList<T>, IMainThread
+            => list.Dispatcher.TrueThreadInvokeAsync(() => list.Insert(index, item), cancellationToken: cancellationToken);
+        public static Task RemoveAtAsync<T, TList>(this TList list, int index, CancellationToken cancellationToken = default) where TList : IList<T>, IMainThread
+            => list.Dispatcher.TrueThreadInvokeAsync(() => list.RemoveAt(index), cancellationToken: cancellationToken);
 
         #endregion
     }
