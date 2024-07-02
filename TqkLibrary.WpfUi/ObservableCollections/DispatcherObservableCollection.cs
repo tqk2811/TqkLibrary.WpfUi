@@ -27,9 +27,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             get { return _Cursor; }
             set { _Cursor = value; OnPropertyChanged(nameof(Cursor)); }
         }
-        /// <summary>
-        /// 
-        /// </summary>
+
         public event Action<IEnumerable<T>>? OnItemsCleared;
         public event Action<T>? OnItemAdded;
         public event Action<T>? OnItemRemoved;
@@ -60,10 +58,6 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             this.SynchronizationContext = synchronizationContext ?? throw new ArgumentNullException(nameof(synchronizationContext));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="e"></param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnCollectionChanged(e);
@@ -110,9 +104,6 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         protected virtual void OnPropertyChanged([CallerMemberName] string name = "") => OnPropertyChanged(new PropertyChangedEventArgs(name));
 
-        /// <summary>
-        /// 
-        /// </summary>
         protected override void ClearItems()
         {
             var tmp = this.ToList();
