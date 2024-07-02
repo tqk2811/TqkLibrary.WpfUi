@@ -31,27 +31,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// 
         /// </summary>
         public event Action<IEnumerable<T>>? OnItemsCleared;
-        /// <summary>
-        /// 
-        /// </summary>
         public event Action<T>? OnItemAdded;
-        /// <summary>
-        /// 
-        /// </summary>
         public event Action<T>? OnItemRemoved;
 
-
-        /// <summary>
-        /// 
-        /// </summary>
         public SynchronizationContext SynchronizationContext { get; }
-        /// <summary>
-        /// 
-        /// </summary>
         public Dispatcher Dispatcher { get; }
-        /// <summary>
-        /// 
-        /// </summary>
+
+
         public DispatcherObservableCollection()
             : this(
                   Application.Current.Dispatcher,
@@ -60,6 +46,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
 
         }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -121,6 +109,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         }
 
         protected virtual void OnPropertyChanged([CallerMemberName] string name = "") => OnPropertyChanged(new PropertyChangedEventArgs(name));
+
         /// <summary>
         /// 
         /// </summary>
@@ -132,35 +121,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 tmp.ForEach(x => this.OnItemRemoved?.Invoke(x));
             OnItemsCleared?.Invoke(tmp);
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+
+
         public virtual Task AddAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Add(item));
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public virtual Task ClearAsync() => this.Dispatcher.TrueThreadInvokeAsync(() => this.Clear());
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public virtual Task InsertAsync(int index, T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Insert(index, item));
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
         public virtual Task<bool> RemoveAsync(T item) => this.Dispatcher.TrueThreadInvokeAsync(() => this.Remove(item));
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
         public virtual Task RemoveAtAsync(int index) => this.Dispatcher.TrueThreadInvokeAsync(() => this.RemoveAt(index));
 
 
