@@ -275,25 +275,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
-        public void Add(T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        int IList.Add(object? value)
-        {
-            throw new NotSupportedException();
-        }
+        public void Add(T item) => throw new NotSupportedException();
+        int IList.Add(object? value) => throw new NotSupportedException();
 
         #endregion
 
         #region Contains
-
-        bool IList.Contains(object? value)
-        {
-            return Contains((T)value!);
-        }
-
+        bool IList.Contains(object? value) => Contains((T)value!);
         /// <summary>
         /// Not supported.
         /// </summary>
@@ -301,34 +289,22 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <returns>
         /// Always false.
         /// </returns>
-        public bool Contains(T item)
-        {
-            return false;
-        }
-
+        public bool Contains(T item) => false;
         #endregion
 
         #region Clear
-
         /// <summary>
         /// Not supported.
         /// </summary>
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
-        public void Clear()
-        {
-            throw new NotSupportedException();
-        }
-
+        public void Clear() => throw new NotSupportedException();
         #endregion
 
         #region IndexOf
 
-        int IList.IndexOf(object? value)
-        {
-            return IndexOf((T)value!);
-        }
+        int IList.IndexOf(object? value) => IndexOf((T)value!);
 
         /// <summary>
         /// Not supported
@@ -337,10 +313,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <returns>
         /// Always -1.
         /// </returns>
-        public int IndexOf(T item)
-        {
-            return -1;
-        }
+        public int IndexOf(T item) => -1;
 
         #endregion
 
@@ -357,15 +330,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
-        public void Insert(int index, T item)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IList.Insert(int index, object? value)
-        {
-            Insert(index, (T)value!);
-        }
+        public void Insert(int index, T item) => throw new NotSupportedException();
+        void IList.Insert(int index, object? value) => Insert(index, (T)value!);
 
         #endregion
 
@@ -381,16 +347,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
-        public void RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
-
-        void IList.Remove(object? value)
-        {
-            throw new NotSupportedException();
-        }
-
+        public void RemoveAt(int index) => throw new NotSupportedException();
+        void IList.Remove(object? value) => Remove((T)value!);
         /// <summary>
         /// Not supported.
         /// </summary>
@@ -401,10 +359,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <exception cref="T:System.NotSupportedException">
         /// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </exception>
-        public bool Remove(T item)
-        {
-            throw new NotSupportedException();
-        }
+        public bool Remove(T item) => throw new NotSupportedException();
 
         #endregion
 
@@ -430,15 +385,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// -or-
         /// Type <paramref name="T"/> cannot be cast automatically to the type of the destination <paramref name="array"/>.
         /// </exception>
-        public void CopyTo(T[] array, int arrayIndex)
-        {
-            throw new NotSupportedException();
-        }
-
-        void ICollection.CopyTo(Array array, int index)
-        {
-            throw new NotSupportedException();
-        }
+        public void CopyTo(T[] array, int arrayIndex) => throw new NotSupportedException();
+        void ICollection.CopyTo(Array array, int index) => throw new NotSupportedException();
 
         #endregion
 
@@ -451,10 +399,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <returns>
         /// An object that can be used to synchronize access to the <see cref="T:System.Collections.ICollection"/>.
         /// </returns>
-        public object SyncRoot
-        {
-            get { return this; }
-        }
+        public object SyncRoot => this;
 
         /// <summary>
         /// Gets a value indicating whether access to the <see cref="T:System.Collections.ICollection"/> is synchronized (thread safe).
@@ -462,10 +407,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value></value>
         /// <returns>Always false.
         /// </returns>
-        public bool IsSynchronized
-        {
-            get { return false; }
-        }
+        public bool IsSynchronized => false;
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
@@ -473,10 +415,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value></value>
         /// <returns>Always true.
         /// </returns>
-        public bool IsReadOnly
-        {
-            get { return true; }
-        }
+        public bool IsReadOnly => true;
 
         /// <summary>
         /// Gets a value indicating whether the <see cref="T:System.Collections.IList"/> has a fixed size.
@@ -484,10 +423,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value></value>
         /// <returns>Always false.
         /// </returns>
-        public bool IsFixedSize
-        {
-            get { return false; }
-        }
+        public bool IsFixedSize => false;
 
         #endregion
 
