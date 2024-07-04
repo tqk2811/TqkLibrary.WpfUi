@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFrameworks>net6.0-windows</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<UseWPF>true</UseWPF>
+		<LangVersion>11.0</LangVersion>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\TqkLibrary.WpfUi\TqkLibrary.WpfUi.csproj" />
+	</ItemGroup>
+
+</Project>
