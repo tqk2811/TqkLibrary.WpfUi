@@ -20,7 +20,7 @@
         /// <summary>
         /// 
         /// </summary>
-        event ChangeCallBack<T> Change;
+        event ChangeCallBack<T>? Change;
     }
 
     ///// <summary>
