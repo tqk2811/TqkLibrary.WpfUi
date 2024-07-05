@@ -293,7 +293,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         {
             this.Dispatcher.VerifyAccess();
 
-            foreach (int keyPage in _pages.Keys)
+            foreach (int keyPage in _pages.Keys.ToList())
             {
                 if (
                     _pages[keyPage].Items.Values.Any(x => x.ViewModel is not null) &&
