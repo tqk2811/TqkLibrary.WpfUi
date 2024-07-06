@@ -20,7 +20,7 @@ using TqkLibrary.WpfUi.Interfaces;
 namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 {
     public class AsyncCollection<TData, TViewModel> : IList<TViewModel>, IList, INotifyPropertyChanged, INotifyCollectionChanged
-        where TViewModel : IViewModelUpdate<TData>
+        where TViewModel : IViewModel<TData>
     {
         #region INotifyPropertyChanged
         public virtual event PropertyChangedEventHandler? PropertyChanged;
