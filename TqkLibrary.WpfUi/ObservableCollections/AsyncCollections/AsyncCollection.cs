@@ -15,11 +15,12 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 {
     public class AsyncCollection<TData, TViewModel> : IList<TViewModel>, IList, INotifyPropertyChanged, INotifyCollectionChanged
-        where TViewModel : IViewModel<TData>
+        where TViewModel : IViewModelUpdate<TData>
     {
         #region INotifyPropertyChanged
         public virtual event PropertyChangedEventHandler? PropertyChanged;
@@ -72,7 +73,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 
 
 
-        readonly IAsyncData<TData> _asyncData;
+        readonly IRemoteDataReadonly<TData> _asyncData;
         readonly Func<TData, TViewModel> _func;
 
 
@@ -93,7 +94,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 
 
         public AsyncCollection(
-           IAsyncData<TData> asyncData,
+           IRemoteDataReadonly<TData> asyncData,
            Func<TData, TViewModel> func,
            int pageSize = 50
            ) :
@@ -108,7 +109,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         }
 
         public AsyncCollection(
-            IAsyncData<TData> asyncData,
+            IRemoteDataReadonly<TData> asyncData,
             Func<TData, TViewModel> func,
             int pageSize,
             Dispatcher dispatcher,
