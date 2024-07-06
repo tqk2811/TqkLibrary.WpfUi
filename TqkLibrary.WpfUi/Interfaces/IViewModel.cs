@@ -1,4 +1,4 @@
-﻿namespace TqkLibrary.WpfUi.ObservableCollections
+﻿namespace TqkLibrary.WpfUi.Interfaces
 {
     /// <summary>
     /// 
@@ -22,22 +22,4 @@
         /// </summary>
         event ChangeCallBack<T>? Change;
     }
-
-    ///// <summary>
-    ///// 
-    ///// </summary>
-    ///// <typeparam name="TInterface"></typeparam>
-    ///// <typeparam name="TClass"></typeparam>
-    //public interface IViewModel<TInterface, TClass>
-    //    where TClass : class, TInterface
-    //{
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    TInterface Data { get; }
-    //    /// <summary>
-    //    /// 
-    //    /// </summary>
-    //    event ChangeCallBack<TInterface> Change;
-    //}
 }

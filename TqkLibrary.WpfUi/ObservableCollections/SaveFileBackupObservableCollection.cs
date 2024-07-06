@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Timers;
 using TqkLibrary.Data.Json;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {

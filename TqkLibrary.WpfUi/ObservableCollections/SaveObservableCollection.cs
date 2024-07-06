@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {

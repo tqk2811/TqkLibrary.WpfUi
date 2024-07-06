@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using TqkLibrary.Data.Json;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {

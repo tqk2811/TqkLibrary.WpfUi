@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Markup;
+using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {
