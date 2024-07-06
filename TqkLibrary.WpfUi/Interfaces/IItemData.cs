@@ -1,4 +1,4 @@
-﻿namespace TqkLibrary.WpfUi.ObservableCollections
+﻿namespace TqkLibrary.WpfUi.Interfaces
 {
     /// <summary>
     /// 
