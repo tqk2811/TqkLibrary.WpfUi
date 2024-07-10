@@ -1,0 +1,14 @@
+﻿<Window x:Class="TestWpfApp.TestUC.TestInputTag.InputTagWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestWpfApp.TestUC.TestInputTag"
+        xmlns:WpfUIControl="clr-namespace:TqkLibrary.WpfUi.UserControls;assembly=TqkLibrary.WpfUi"
+        mc:Ignorable="d"
+        Title="InputTagWindow" Height="450" Width="800">
+    <Grid>
+        <!--<WpfUIControl:InputTag HorizontalAlignment="Stretch" Height="60" VerticalAlignment="Top" Width="300"/>-->
+        <WpfUIControl:TokenizingControl FontSize="36"/>
+    </Grid>
+</Window>

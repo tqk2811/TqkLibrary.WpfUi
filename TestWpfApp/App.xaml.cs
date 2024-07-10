@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows;
 using TestWpfApp.TestUC.TestAsyncCollection;
+using TestWpfApp.TestUC.TestInputTag;
 
 namespace TestWpfApp
 {
@@ -18,7 +19,8 @@ namespace TestWpfApp
 
         Window GetWindow()
         {
-            return new AsyncCollectionWindow();
+            //return new AsyncCollectionWindow();
+            return new InputTagWindow();
         }
     }
 
