@@ -1,5 +1,4 @@
-﻿#if NET5_0_OR_GREATER
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,4 +10,3 @@ namespace TqkLibrary.WpfUi.Interfaces
         Task<IEnumerable<T>> DeletesAsync(IEnumerable<T> items, CancellationToken cancellationToken = default);
     }
 }
-#endif

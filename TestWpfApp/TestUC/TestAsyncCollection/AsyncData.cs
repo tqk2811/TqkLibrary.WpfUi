@@ -19,10 +19,13 @@ namespace TestWpfApp.TestUC.TestAsyncCollection
             await Task.Delay(1000, cancellationToken);
             return _items.Count;
         }
-        public async Task<IEnumerable<ItemData>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async IAsyncEnumerable<ItemData> GetAllAsync([EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await Task.Delay(1000, cancellationToken);
-            return _items.ToList();
+            foreach (ItemData item in _items)
+            {
+                yield return item;
+            }
         }
         public async Task<ItemData> GetAsync(ItemData item, CancellationToken cancellationToken = default)
         {
