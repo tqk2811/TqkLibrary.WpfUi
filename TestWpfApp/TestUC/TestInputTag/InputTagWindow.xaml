@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="InputTagWindow" Height="450" Width="800">
     <Grid>
-        <!--<WpfUIControl:InputTag HorizontalAlignment="Stretch" Height="60" VerticalAlignment="Top" Width="300"/>-->
-        <WpfUIControl:TokenizingControl FontSize="36"/>
+        <WpfUIControl:InputTag HorizontalAlignment="Stretch" Height="60" VerticalAlignment="Top"  FontSize="36"/>
+        <!--<WpfUIControl:TokenizingControl FontSize="36"/>-->
     </Grid>
 </Window>
