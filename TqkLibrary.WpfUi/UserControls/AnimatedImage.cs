@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -25,8 +20,8 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public int FrameIndex
         {
-            get { return (int)GetValue(FrameIndexProperty); }
-            set { SetValue(FrameIndexProperty, value); }
+            get { return (int)this.GetValue(FrameIndexProperty); }
+            set { this.SetValue(FrameIndexProperty, value); }
         }
 
         /// <summary>
@@ -34,8 +29,8 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public new ImageSource Source
         {
-            get { return (ImageSource)GetValue(SourceProperty); }
-            set { SetValue(SourceProperty, value); }
+            get { return (ImageSource)this.GetValue(SourceProperty); }
+            set { this.SetValue(SourceProperty, value); }
         }
 
         /// <summary>
@@ -43,8 +38,8 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public bool IsAnimationWorking
         {
-            get { return (bool)GetValue(IsAnimationWorkingProperty); }
-            set { SetValue(IsAnimationWorkingProperty, value); }
+            get { return (bool)this.GetValue(IsAnimationWorkingProperty); }
+            set { this.SetValue(IsAnimationWorkingProperty, value); }
         }
         #endregion
 
@@ -55,7 +50,7 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         protected virtual void OnSourceChanged(DependencyPropertyChangedEventArgs aEventArgs)
         {
-            ClearAnimation();
+            this.ClearAnimation();
 
             BitmapImage? lBitmapImage = aEventArgs.NewValue as BitmapImage;
 
@@ -66,13 +61,13 @@ namespace TqkLibrary.WpfUi.UserControls
                 return;
             }
 
-            if (!IsAnimatedGifImage(lBitmapImage))
+            if (!this.IsAnimatedGifImage(lBitmapImage))
             {
                 base.Source = lBitmapImage;
                 return;
             }
 
-            PrepareAnimation(lBitmapImage);
+            this.PrepareAnimation(lBitmapImage);
         }
 
         #endregion
@@ -88,23 +83,23 @@ namespace TqkLibrary.WpfUi.UserControls
 
         private void ClearAnimation()
         {
-            if (Animation != null)
+            if (this.Animation != null)
             {
-                BeginAnimation(FrameIndexProperty, null);
+                this.BeginAnimation(FrameIndexProperty, null);
             }
 
             //IsAnimationWorking = false;
-            Animation = null;
-            Decoder = null;
+            this.Animation = null;
+            this.Decoder = null;
         }
 
         private void PrepareAnimation(BitmapImage aBitmapImage)
         {
-            if(aBitmapImage is null) throw new ArgumentNullException(nameof(aBitmapImage));
+            if (aBitmapImage is null) throw new ArgumentNullException(nameof(aBitmapImage));
 
             if (aBitmapImage.UriSource != null)
             {
-                Decoder = new GifBitmapDecoder(
+                this.Decoder = new GifBitmapDecoder(
                     aBitmapImage.UriSource,
                     BitmapCreateOptions.PreservePixelFormat,
                     BitmapCacheOption.Default);
@@ -112,29 +107,29 @@ namespace TqkLibrary.WpfUi.UserControls
             else
             {
                 aBitmapImage.StreamSource.Position = 0;
-                Decoder = new GifBitmapDecoder(
+                this.Decoder = new GifBitmapDecoder(
                     aBitmapImage.StreamSource,
                     BitmapCreateOptions.PreservePixelFormat,
                     BitmapCacheOption.Default);
             }
 
-            Animation =
+            this.Animation =
                 new Int32Animation(
                     0,
-                    Decoder.Frames.Count - 1,
+                    this.Decoder.Frames.Count - 1,
                     new Duration(
                         new TimeSpan(
                             0,
                             0,
                             0,
-                            Decoder.Frames.Count / 10,
-                            (int)((Decoder.Frames.Count / 10.0 - Decoder.Frames.Count / 10) * 1000))))
+                            this.Decoder.Frames.Count / 10,
+                            (int)((this.Decoder.Frames.Count / 10.0 - this.Decoder.Frames.Count / 10) * 1000))))
                 {
                     RepeatBehavior = RepeatBehavior.Forever
                 };
 
-            base.Source = Decoder.Frames[0];
-            BeginAnimation(FrameIndexProperty, Animation);
+            base.Source = this.Decoder.Frames[0];
+            this.BeginAnimation(FrameIndexProperty, this.Animation);
             //IsAnimationWorking = true;
         }
 
@@ -158,7 +153,7 @@ namespace TqkLibrary.WpfUi.UserControls
                     long lStreamPosition = aBitmapImage.StreamSource.Position;
                     aBitmapImage.StreamSource.Position = 0;
                     GifBitmapDecoder lBitmapDecoder =
-                        new GifBitmapDecoder(
+                        new(
                             aBitmapImage.StreamSource,
                             BitmapCreateOptions.PreservePixelFormat,
                             BitmapCacheOption.Default);

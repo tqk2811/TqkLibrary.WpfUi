@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {
@@ -16,15 +11,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         int _pageSize = 100;
         public int PageSize
         {
-            get { return _pageSize; }
-            set { _pageSize = value; NotifyPropertyChange(); }
+            get { return this._pageSize; }
+            set { this._pageSize = value; this.NotifyPropertyChange(); }
         }
 
         bool _isLoading = false;
         public bool IsLoading
         {
-            get { return _isLoading; }
-            private set { _isLoading = value; NotifyPropertyChange(); }
+            get { return this._isLoading; }
+            private set { this._isLoading = value; this.NotifyPropertyChange(); }
         }
 
         object? IList.this[int index]
@@ -57,8 +52,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
         private void FireCollectionReset()
         {
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            OnCollectionChanged(e);
+            NotifyCollectionChangedEventArgs e = new(NotifyCollectionChangedAction.Reset);
+            this.OnCollectionChanged(e);
         }
     }
 }

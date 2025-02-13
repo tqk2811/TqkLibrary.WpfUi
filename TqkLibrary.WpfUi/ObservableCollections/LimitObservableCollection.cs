@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
@@ -17,7 +16,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             this.LogPath = new Func<string>(() => $"{Directory.GetCurrentDirectory()}\\{DateTime.Now:yyyy-MM-dd}.log");
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -34,7 +33,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// 
         /// </summary>
         public int Limit { get; set; } = 100;
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -44,7 +43,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// 
         /// </summary>
         public bool IsExportToFile { get; set; } = true;
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -56,24 +55,24 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="item"></param>
         protected override void InsertItem(int index, T item)
         {
-            if (this.Count == Limit) base.RemoveAt(IsInsertTop ? this.Count - 1 : 0);
-            if (LogPath != null && IsExportToFile)
+            if (this.Count == this.Limit) base.RemoveAt(this.IsInsertTop ? this.Count - 1 : 0);
+            if (this.LogPath != null && this.IsExportToFile)
             {
-                string path = LogPath.Invoke();
+                string path = this.LogPath.Invoke();
                 if (!string.IsNullOrEmpty(path))
                 {
-                    Dispatcher.Invoke(() =>
+                    this.Dispatcher.Invoke(() =>
                     {
                         try
                         {
-                            using StreamWriter sw = new StreamWriter(path, true);
+                            using StreamWriter sw = new(path, true);
                             sw.WriteLine(item?.ToString());
                         }
                         catch { }
                     });
                 }
             }
-            base.InsertItem(IsInsertTop ? 0 : this.Count, item);
+            base.InsertItem(this.IsInsertTop ? 0 : this.Count, item);
         }
         /// <summary>
         /// 

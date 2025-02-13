@@ -21,7 +21,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public ISaveJsonDataControl SaveJsonData => _saveJsonData;
+        public ISaveJsonDataControl SaveJsonData => this._saveJsonData;
 
         /// <summary>
         /// 
@@ -39,23 +39,23 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
-            _saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
-            this.Load(_saveJsonData.Data, func);
-            this.OnSave += SaveFileGroupObservableCollection_OnSave;
+            this._saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
+            this.Load(this._saveJsonData.Data, func);
+            this.OnSave += this.SaveFileGroupObservableCollection_OnSave;
         }
         /// <summary>
         /// 
         /// </summary>
         ~SaveFileGroupObservableCollection()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
         }
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -63,11 +63,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             this.Dispatcher.InvokeAsync(() =>
             {
-                _saveJsonData.Data.Clear();
-                _saveJsonData.Data.AddRange(datas);
-                if (IsAutoSave)
+                this._saveJsonData.Data.Clear();
+                this._saveJsonData.Data.AddRange(datas);
+                if (this.IsAutoSave)
                 {
-                    _saveJsonData.TriggerSave();
+                    this._saveJsonData.TriggerSave();
                 }
             });
         }

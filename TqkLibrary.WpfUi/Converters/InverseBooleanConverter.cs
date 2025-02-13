@@ -28,7 +28,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// <exception cref="InvalidOperationException"></exception>
         public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
-            if (value == null) return DefaultOnNull;
+            if (value == null) return this.DefaultOnNull;
             if (value is bool b)
             {
                 return !b;
@@ -36,9 +36,9 @@ namespace TqkLibrary.WpfUi.Converters
             else if (value is bool?)
             {
                 bool? nb = (bool?)value;
-                return nb.HasValue ? !nb.Value : DefaultOnNull;
+                return nb.HasValue ? !nb.Value : this.DefaultOnNull;
             }
-            else return DefaultOnNonBool;
+            else return this.DefaultOnNonBool;
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// <exception cref="InvalidOperationException"></exception>
         public object? ConvertBack(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
-            if (value == null) return DefaultOnNull;
+            if (value == null) return this.DefaultOnNull;
             if (value is bool b)
             {
                 return !b;
@@ -60,9 +60,9 @@ namespace TqkLibrary.WpfUi.Converters
             else if (value is bool?)
             {
                 bool? nb = (bool?)value;
-                return nb.HasValue ? !nb.Value : DefaultOnNull;
+                return nb.HasValue ? !nb.Value : this.DefaultOnNull;
             }
-            else return DefaultOnNonBool;
+            else return this.DefaultOnNonBool;
         }
     }
 }

@@ -34,14 +34,14 @@ namespace TqkLibrary.WpfUi.Converters
             if (value is Enum e && parameter is Enum p)
             {
                 this.CurrentValue = e;
-                if (IsAttributeFlag) return CurrentValue.HasFlag(p);// ((mask & target) != 0);
-                else return CurrentValue.Equals(p);
+                if (this.IsAttributeFlag) return this.CurrentValue.HasFlag(p);// ((mask & target) != 0);
+                else return this.CurrentValue.Equals(p);
             }
             else if (value.GetType().IsValueType && parameter.GetType().IsValueType)
             {
-                CurrentUlongValue = System.Convert.ToUInt64(value);
-                if (IsAttributeFlag) return (CurrentUlongValue & System.Convert.ToUInt64(parameter)) != 0;
-                else return CurrentUlongValue == System.Convert.ToUInt64(parameter);
+                this.CurrentUlongValue = System.Convert.ToUInt64(value);
+                if (this.IsAttributeFlag) return (this.CurrentUlongValue & System.Convert.ToUInt64(parameter)) != 0;
+                else return this.CurrentUlongValue == System.Convert.ToUInt64(parameter);
             }
             return false;
         }
@@ -56,35 +56,35 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (CurrentValue is null) 
+            if (this.CurrentValue is null)
                 throw new InvalidOperationException($"Need call {nameof(Convert)} first");
 
             if (parameter is Enum par)
             {
-                if (IsAttributeFlag)
+                if (this.IsAttributeFlag)
                 {
-                    if ((bool)value) CurrentValue = CurrentValue.Or(par);
-                    else CurrentValue = CurrentValue.And(par.Not());
-                    return CurrentValue;
+                    if ((bool)value) this.CurrentValue = this.CurrentValue.Or(par);
+                    else this.CurrentValue = this.CurrentValue.And(par.Not());
+                    return this.CurrentValue;
                 }
                 else
                 {
                     if ((bool)value) return parameter;
-                    else return (Enum)Enum.ToObject(targetType, UncheckNonAttributeFlag);
+                    else return (Enum)Enum.ToObject(targetType, this.UncheckNonAttributeFlag);
                 }
             }
             else
             {
-                if (IsAttributeFlag)
+                if (this.IsAttributeFlag)
                 {
-                    if ((bool)value) CurrentUlongValue |= System.Convert.ToUInt64(parameter);
-                    else CurrentUlongValue &= ~System.Convert.ToUInt64(parameter);
-                    return CurrentUlongValue;
+                    if ((bool)value) this.CurrentUlongValue |= System.Convert.ToUInt64(parameter);
+                    else this.CurrentUlongValue &= ~System.Convert.ToUInt64(parameter);
+                    return this.CurrentUlongValue;
                 }
                 else
                 {
                     if ((bool)value) return parameter;
-                    else return UncheckNonAttributeFlag;
+                    else return this.UncheckNonAttributeFlag;
                 }
             }
 

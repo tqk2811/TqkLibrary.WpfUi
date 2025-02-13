@@ -4,11 +4,8 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -25,8 +22,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         Cursor? _Cursor = null;
         public virtual Cursor? Cursor
         {
-            get { return _Cursor; }
-            set { _Cursor = value; OnPropertyChanged(nameof(Cursor)); }
+            get { return this._Cursor; }
+            set { this._Cursor = value; this.OnPropertyChanged(nameof(this.Cursor)); }
         }
 
         public event Action<IEnumerable<T>>? OnItemsCleared;
@@ -103,7 +100,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             }
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string name = "") => OnPropertyChanged(new PropertyChangedEventArgs(name));
+        protected virtual void OnPropertyChanged([CallerMemberName] string name = "") => this.OnPropertyChanged(new PropertyChangedEventArgs(name));
 
         protected override void ClearItems()
         {

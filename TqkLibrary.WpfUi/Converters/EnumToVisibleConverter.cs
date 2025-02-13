@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -39,7 +35,7 @@ namespace TqkLibrary.WpfUi.Converters
             if (this.IsReversed) result = !result;
 
             if (result) return Visibility.Visible;
-            else return VisibilityType;
+            else return this.VisibilityType;
         }
         /// <summary>
         /// 

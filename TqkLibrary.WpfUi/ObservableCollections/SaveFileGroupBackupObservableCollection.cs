@@ -21,7 +21,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public ISaveJsonDataControl SaveJsonData => _saveJsonData;
+        public ISaveJsonDataControl SaveJsonData => this._saveJsonData;
 
         /// <summary>
         /// 
@@ -33,8 +33,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         public TimeSpan BackupInterval
         {
-            get { return _saveJsonData.BackupInterval; }
-            set { _saveJsonData.BackupInterval = value; }
+            get { return this._saveJsonData.BackupInterval; }
+            set { this._saveJsonData.BackupInterval = value; }
         }
 
         /// <summary>
@@ -49,23 +49,23 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
-            _saveJsonData = new SaveJsonDataAutoBackup<List<TData>>(savePath, backupDir, jsonSerializerSettings);
-            this.Load(_saveJsonData.Data, func);
-            this.OnSave += SaveFileGroupObservableCollection_OnSave;
+            this._saveJsonData = new SaveJsonDataAutoBackup<List<TData>>(savePath, backupDir, jsonSerializerSettings);
+            this.Load(this._saveJsonData.Data, func);
+            this.OnSave += this.SaveFileGroupObservableCollection_OnSave;
         }
         /// <summary>
         /// 
         /// </summary>
         ~SaveFileGroupBackupObservableCollection()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
         }
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -73,11 +73,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             this.Dispatcher.InvokeAsync(() =>
             {
-                _saveJsonData.Data.Clear();
-                _saveJsonData.Data.AddRange(datas);
-                if (IsAutoSave)
+                this._saveJsonData.Data.Clear();
+                this._saveJsonData.Data.AddRange(datas);
+                if (this.IsAutoSave)
                 {
-                    _saveJsonData.TriggerSave();
+                    this._saveJsonData.TriggerSave();
                 }
             });
         }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using System.Windows.Markup;
 using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
@@ -18,12 +16,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
       where TData : class, IItemData<TId>
       where TViewModel : class, IViewModel<TData>
     {
-        readonly List<TViewModel> _datas = new List<TViewModel>();
+        readonly List<TViewModel> _datas = new();
 
         /// <summary>
         /// 
         /// </summary>
-        public IReadOnlyList<TViewModel> ViewModels => _datas;
+        public IReadOnlyList<TViewModel> ViewModels => this._datas;
 
         /// <summary>
         /// 
@@ -45,10 +43,10 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (func is null) throw new ArgumentNullException(nameof(func));
             this.Dispatcher.VerifyAccess();
 
-            _datas.Clear();
+            this._datas.Clear();
             foreach (var data in datas)
             {
-                _datas.Add(func(data));
+                this._datas.Add(func(data));
             }
         }
 
@@ -60,7 +58,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         public override Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
-            => this.Dispatcher.TrueThreadInvokeAsync(() => Load(datas, func));
+            => this.Dispatcher.TrueThreadInvokeAsync(() => this.Load(datas, func));
 
         /// <summary>
         /// 
@@ -72,9 +70,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (func is null) throw new ArgumentNullException(nameof(func));
             this.Dispatcher.VerifyAccess();
 
-            using var l = GetLockLoader();
+            using var l = this.GetLockLoader();
             this.Clear();
-            foreach (var data in _datas)
+            foreach (var data in this._datas)
             {
                 if (func(data))
                     this.Add(data);
@@ -87,14 +85,14 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="func"></param>
         /// <returns></returns>
         public virtual Task ShowAsync(Func<TViewModel, bool> func)
-            => this.Dispatcher.TrueThreadInvokeAsync(() => Show(func));
+            => this.Dispatcher.TrueThreadInvokeAsync(() => this.Show(func));
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         public virtual void ShowGroup(TId id)
-            => Show(x => x.Data?.GroupId?.Equals(id) == true);
+            => this.Show(x => x.Data?.GroupId?.Equals(id) == true);
 
         /// <summary>
         /// 
@@ -102,14 +100,14 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="id"></param>
         /// <returns></returns>
         public virtual Task ShowGroupAsync(TId id)
-            => ShowAsync(x => x.Data?.GroupId?.Equals(id) == true);
+            => this.ShowAsync(x => x.Data?.GroupId?.Equals(id) == true);
 
         /// <summary>
         /// 
         /// </summary>
         public override void Save()
         {
-            TriggerEventSave(_datas.Select(x => x.Data));
+            this.TriggerEventSave(this._datas.Select(x => x.Data));
         }
 
         /// <summary>
@@ -133,19 +131,19 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                     if (targetInsert is null)
                     {
                         //add to last 
-                        _datas.Add(item);
+                        this._datas.Add(item);
                     }
                     else
                     {
-                        int data_insert_index = _datas.IndexOf(targetInsert);
-                        _datas.Insert(data_insert_index, item);
+                        int data_insert_index = this._datas.IndexOf(targetInsert);
+                        this._datas.Insert(data_insert_index, item);
                     }
                     base.InsertItem(index, item);
                 }
                 else
                 {
                     //search mode, just add to last
-                    _datas.Add(item);
+                    this._datas.Add(item);
                 }
             }
             else
@@ -171,9 +169,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                     //all same group
                     var old = this[oldIndex];
                     var @new = this[newIndex];
-                    var new_data_index = _datas.IndexOf(@new);
-                    _datas.Remove(old);
-                    _datas.Insert(new_data_index, old);
+                    var new_data_index = this._datas.IndexOf(@new);
+                    this._datas.Remove(old);
+                    this._datas.Insert(new_data_index, old);
 
                     base.MoveItem(oldIndex, newIndex);
                 }
@@ -198,7 +196,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             this.Dispatcher.VerifyAccess();
             if (this.IsLoaded)
             {
-                _datas.Remove(this[index]);
+                this._datas.Remove(this[index]);
                 base.RemoveItem(index);
             }
             else
@@ -219,9 +217,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (this.IsLoaded)
             {
                 var oldItem = this[index];
-                int index_data_oldItem = _datas.IndexOf(oldItem);
-                _datas.Remove(oldItem);
-                _datas.Insert(index_data_oldItem, item);
+                int index_data_oldItem = this._datas.IndexOf(oldItem);
+                this._datas.Remove(oldItem);
+                this._datas.Insert(index_data_oldItem, item);
 
                 if (this.GroupBy(x => x.Data.GroupId).Count() == 1 &&
                     this.First().Data.GroupId?.Equals(item.Data.GroupId) == true)
@@ -251,7 +249,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             {
                 foreach (var item in this)
                 {
-                    _datas.Remove(item);
+                    this._datas.Remove(item);
                 }
                 base.ClearItems();
             }

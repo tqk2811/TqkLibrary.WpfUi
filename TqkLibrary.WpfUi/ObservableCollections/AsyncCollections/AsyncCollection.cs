@@ -5,14 +5,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Markup;
 using System.Windows.Threading;
 using TqkLibrary.WpfUi.Interfaces;
 
@@ -24,7 +20,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         #region INotifyPropertyChanged
         public virtual event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
-        protected virtual void NotifyPropertyChange([CallerMemberName] string name = "") => OnPropertyChanged(new PropertyChangedEventArgs(name));
+        protected virtual void NotifyPropertyChange([CallerMemberName] string name = "") => this.OnPropertyChanged(new PropertyChangedEventArgs(name));
 
         #endregion
 
@@ -38,18 +34,18 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         protected virtual void FireCollectionReset()
         {
             this.Dispatcher.VerifyAccess();
-            foreach (int keyPage in _pages.Keys)
+            foreach (int keyPage in this._pages.Keys)
             {
-                foreach (int keyIndex in _pages[keyPage].Items.Keys)
+                foreach (int keyIndex in this._pages[keyPage].Items.Keys)
                 {
-                    _pages[keyPage].Items[keyIndex].ViewModel = default(TViewModel);
-                    _pages[keyPage].Items[keyIndex].DisableFetchCount = 0;
+                    this._pages[keyPage].Items[keyIndex].ViewModel = default;
+                    this._pages[keyPage].Items[keyIndex].DisableFetchCount = 0;
                 };
             }
 #if DEBUG
             Debug.WriteLine($"==================Reset================");
 #endif
-            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
         void FireItemReplace(PageData.ItemData itemData, int index, TViewModel? newItem, TViewModel? oldItem
 #if DEBUG
@@ -65,7 +61,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 #endif
                 if (oldItem is null && newItem is not null)
                     itemData.DisableFetchCount = 1;
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, newItem, oldItem, index));
             }
         }
         #endregion
@@ -135,18 +131,18 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
                 this.Dispatcher.VerifyAccess();
                 //main thread access only
 
-                int pageIndex = index / PageSize;
-                int pageOffset = index % PageSize;
+                int pageIndex = index / this.PageSize;
+                int pageOffset = index % this.PageSize;
 
                 // remove stale pages
-                CleanUpPages();
+                this.CleanUpPages();
 
-                bool isShouldRequestPage = !_pages.ContainsKey(pageIndex);//should request if was not request
+                bool isShouldRequestPage = !this._pages.ContainsKey(pageIndex);//should request if was not request
                 if (!isShouldRequestPage)
-                    isShouldRequestPage = _pages[pageIndex].Items.All(x => x.Value.ViewModel is null);//page was reset
-                if (!isShouldRequestPage && _pages[pageIndex].Items[pageOffset].DisableFetchCount > 0)//disable RequestPage by noti CollectionChanged
+                    isShouldRequestPage = this._pages[pageIndex].Items.All(x => x.Value.ViewModel is null);//page was reset
+                if (!isShouldRequestPage && this._pages[pageIndex].Items[pageOffset].DisableFetchCount > 0)//disable RequestPage by noti CollectionChanged
                 {
-                    _pages[pageIndex].Items[pageOffset].DisableFetchCount--;
+                    this._pages[pageIndex].Items[pageOffset].DisableFetchCount--;
                     isShouldRequestPage = false;
 #if DEBUG
                     Debug.WriteLine($"Skip RequestPage at {index}");
@@ -154,17 +150,17 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
                 }
                 if (isShouldRequestPage)
                 {
-                    RequestPage(pageIndex);
+                    this.RequestPage(pageIndex);
 
                     // if accessing upper 50% then request next page
-                    if (pageOffset > PageSize / 2 && pageIndex < Count / PageSize)
-                        RequestPage(pageIndex + 1);
+                    if (pageOffset > this.PageSize / 2 && pageIndex < this.Count / this.PageSize)
+                        this.RequestPage(pageIndex + 1);
 
                     // if accessing lower 50% then request prev page
-                    if (pageOffset < PageSize / 2 && pageIndex > 0)
-                        RequestPage(pageIndex - 1);
+                    if (pageOffset < this.PageSize / 2 && pageIndex > 0)
+                        this.RequestPage(pageIndex - 1);
                 }
-                var result = _pages[pageIndex].Items[pageOffset].ViewModel;
+                var result = this._pages[pageIndex].Items[pageOffset].ViewModel;
 #if DEBUG
                 Debug.WriteLine($"Get at {index}, values is {(result is null ? "null" : "not null")}");
 #endif
@@ -184,12 +180,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         {
             get
             {
-                if (_count == -1)
+                if (this._count == -1)
                 {
-                    Task.Run(() => FetchCountAsync(false));
+                    Task.Run(() => this.FetchCountAsync(false));
                     return 0;
                 }
-                return _count;
+                return this._count;
             }
         }
 
@@ -201,7 +197,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
 
         [Obsolete] public void Add(TViewModel item) => throw new NotSupportedException();
         [Obsolete] public void Clear() => throw new NotSupportedException();
-        public bool Contains(TViewModel item) => _pages.ViewModels.Contains(item);
+        public bool Contains(TViewModel item) => this._pages.ViewModels.Contains(item);
         [Obsolete] public void CopyTo(TViewModel[] array, int arrayIndex) => throw new NotSupportedException();
         [Obsolete] public int IndexOf(TViewModel item) => -1;
         [Obsolete] public void Insert(int index, TViewModel item) => throw new NotSupportedException();
@@ -209,21 +205,21 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         [Obsolete] public void RemoveAt(int index) => throw new NotSupportedException();
 
         [Obsolete] int IList.Add(object? value) => throw new NotSupportedException();
-        bool IList.Contains(object? value) => Contains((TViewModel)value!);
-        [Obsolete] int IList.IndexOf(object? value) => IndexOf((TViewModel)value!);
-        [Obsolete] void IList.Insert(int index, object? value) => Insert(index, (TViewModel)value!);
+        bool IList.Contains(object? value) => this.Contains((TViewModel)value!);
+        [Obsolete] int IList.IndexOf(object? value) => this.IndexOf((TViewModel)value!);
+        [Obsolete] void IList.Insert(int index, object? value) => this.Insert(index, (TViewModel)value!);
         [Obsolete] void IList.Remove(object? value) => throw new NotSupportedException();
         [Obsolete] void ICollection.CopyTo(Array array, int index) => throw new NotSupportedException();
 
 
         public IEnumerator<TViewModel> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
                 yield return this[i]!;
             }
         }
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => this.GetEnumerator();
         #endregion
 
 
@@ -238,10 +234,10 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
             }
             public PageData(int pageSize)
             {
-                Items = new();
+                this.Items = new();
                 for (int i = 0; i < pageSize; i++)
                 {
-                    Items[i] = new ItemData() { ViewModel = default(TViewModel) };
+                    this.Items[i] = new ItemData() { ViewModel = default };
                 }
             }
             public Dictionary<int, ItemData> Items { get; }
@@ -271,41 +267,41 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         {
             this.Dispatcher.VerifyAccess();
 
-            if (!_pages.ContainsKey(pageIndex))
-                _pages[pageIndex] = new PageData(PageSize);
+            if (!this._pages.ContainsKey(pageIndex))
+                this._pages[pageIndex] = new PageData(this.PageSize);
 
-            bool isShouldFetch = _pages[pageIndex].TaskFetchPage is null;//was not fetch
-            if (!isShouldFetch && (_pages[pageIndex].TaskFetchPage!.IsCanceled || _pages[pageIndex].TaskFetchPage!.IsFaulted))//fetch error
+            bool isShouldFetch = this._pages[pageIndex].TaskFetchPage is null;//was not fetch
+            if (!isShouldFetch && (this._pages[pageIndex].TaskFetchPage!.IsCanceled || this._pages[pageIndex].TaskFetchPage!.IsFaulted))//fetch error
                 isShouldFetch = true;
 
 
-            if (_pages[pageIndex].TaskFetchPage is null ||
-                (_pages[pageIndex].TaskFetchPage!.IsCompleted &&
-                    ((DateTime.Now - _pages[pageIndex].TouchTime).TotalMilliseconds > PageTimeout || _pages[pageIndex].Items.All(x => x.Value.ViewModel is null))
+            if (this._pages[pageIndex].TaskFetchPage is null ||
+                (this._pages[pageIndex].TaskFetchPage!.IsCompleted &&
+                    ((DateTime.Now - this._pages[pageIndex].TouchTime).TotalMilliseconds > this.PageTimeout || this._pages[pageIndex].Items.All(x => x.Value.ViewModel is null))
                 )
                 )
             {
                 //make new fetch
-                _pages[pageIndex].TaskFetchPage = Task.Run<Task>(() => FetchPageAsync(pageIndex)).Unwrap();
+                this._pages[pageIndex].TaskFetchPage = Task.Run<Task>(() => this.FetchPageAsync(pageIndex)).Unwrap();
             }
         }
         protected virtual void CleanUpPages()
         {
             this.Dispatcher.VerifyAccess();
 
-            foreach (int keyPage in _pages.Keys.ToList())
+            foreach (int keyPage in this._pages.Keys.ToList())
             {
                 if (
-                    _pages[keyPage].Items.Values.Any(x => x.ViewModel is not null) &&
-                    (DateTime.Now - _pages[keyPage].TouchTime).TotalMilliseconds > PageTimeout
+                    this._pages[keyPage].Items.Values.Any(x => x.ViewModel is not null) &&
+                    (DateTime.Now - this._pages[keyPage].TouchTime).TotalMilliseconds > this.PageTimeout
                     )
                 {
-                    foreach (int keyIndex in _pages[keyPage].Items.Keys)
+                    foreach (int keyIndex in this._pages[keyPage].Items.Keys)
                     {
-                        TViewModel? oldItem = _pages[keyPage].Items[keyIndex].ViewModel;
-                        TViewModel? newItem = default(TViewModel);
-                        _pages[keyPage].Items[keyIndex].ViewModel = newItem;
-                        FireItemReplace(_pages[keyPage].Items[keyIndex], keyPage * PageSize + keyIndex, newItem, oldItem);
+                        TViewModel? oldItem = this._pages[keyPage].Items[keyIndex].ViewModel;
+                        TViewModel? newItem = default;
+                        this._pages[keyPage].Items[keyIndex].ViewModel = newItem;
+                        this.FireItemReplace(this._pages[keyPage].Items[keyIndex], keyPage * this.PageSize + keyIndex, newItem, oldItem);
                     };
                 }
             }
@@ -314,29 +310,29 @@ namespace TqkLibrary.WpfUi.ObservableCollections.AsyncCollections
         #region Fetch
         protected virtual async Task FetchCountAsync(bool force = false)
         {
-            using CancellationTokenSource timeout = new CancellationTokenSource(FetchTimeout);
-            int count = await _asyncData.CountAsync(timeout.Token);
-            if (count != _count || force)
+            using CancellationTokenSource timeout = new(this.FetchTimeout);
+            int count = await this._asyncData.CountAsync(timeout.Token);
+            if (count != this._count || force)
             {
-                _count = count;
-                _ = this.Dispatcher.InvokeAsync(FireCollectionReset);
+                this._count = count;
+                _ = this.Dispatcher.InvokeAsync(this.FireCollectionReset);
             }
         }
         protected virtual async Task FetchPageAsync(int pageIndex)
         {
             Debug.WriteLine($"Start Fetch page {pageIndex}");
-            using CancellationTokenSource timeout = new CancellationTokenSource(FetchTimeout);
-            IEnumerable<TData> datas = await _asyncData.GetsAsync(pageIndex, PageSize, timeout.Token);
-            await Dispatcher.TrueThreadInvokeAsync(() =>
+            using CancellationTokenSource timeout = new(this.FetchTimeout);
+            IEnumerable<TData> datas = await this._asyncData.GetsAsync(pageIndex, this.PageSize, timeout.Token);
+            await this.Dispatcher.TrueThreadInvokeAsync(() =>
             {
                 int indexInPage = 0;
-                _pages[pageIndex].TouchTime = DateTime.Now;
+                this._pages[pageIndex].TouchTime = DateTime.Now;
                 foreach (var data in datas)
                 {
-                    TViewModel newItem = _func(data);
-                    TViewModel? oldItem = _pages[pageIndex].Items[indexInPage].ViewModel;
-                    _pages[pageIndex].Items[indexInPage].ViewModel = newItem;
-                    FireItemReplace(_pages[pageIndex].Items[indexInPage], pageIndex * PageSize + indexInPage, newItem, oldItem);
+                    TViewModel newItem = this._func(data);
+                    TViewModel? oldItem = this._pages[pageIndex].Items[indexInPage].ViewModel;
+                    this._pages[pageIndex].Items[indexInPage].ViewModel = newItem;
+                    this.FireItemReplace(this._pages[pageIndex].Items[indexInPage], pageIndex * this.PageSize + indexInPage, newItem, oldItem);
                     indexInPage++;
                 }
             });

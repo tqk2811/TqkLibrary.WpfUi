@@ -21,10 +21,10 @@ namespace TqkLibrary.WpfUi
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            if (AdornedElement.RenderSize.Width < 20) return;
-            TranslateTransform transform = new TranslateTransform(
-                AdornedElement.RenderSize.Width - 15,
-                (AdornedElement.RenderSize.Height - 5) / 2
+            if (this.AdornedElement.RenderSize.Width < 20) return;
+            TranslateTransform transform = new(
+                this.AdornedElement.RenderSize.Width - 15,
+                (this.AdornedElement.RenderSize.Height - 5) / 2
             );
             drawingContext.PushTransform(transform);
             Geometry geometry = ascGeometry;

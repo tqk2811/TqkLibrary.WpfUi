@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Timers;
 using TqkLibrary.Data.Json;
 using TqkLibrary.WpfUi.Interfaces;
 
@@ -24,7 +20,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <summary>
         /// 
         /// </summary>
-        public ISaveJsonDataControl SaveJsonData => _saveJsonData;
+        public ISaveJsonDataControl SaveJsonData => this._saveJsonData;
 
         /// <summary>
         /// 
@@ -42,23 +38,23 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (string.IsNullOrWhiteSpace(savePath)) throw new ArgumentNullException(nameof(savePath));
             if (func is null) throw new ArgumentNullException(nameof(func));
 
-            _saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
-            base.Load(_saveJsonData.Data, func);
-            base.OnSave += SaveFileObservableCollection_OnSave;
+            this._saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
+            base.Load(this._saveJsonData.Data, func);
+            base.OnSave += this.SaveFileObservableCollection_OnSave;
         }
         /// <summary>
         /// 
         /// </summary>
         ~SaveFileObservableCollection()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
         }
         /// <summary>
         /// 
         /// </summary>
         public void Dispose()
         {
-            _saveJsonData.Dispose();
+            this._saveJsonData.Dispose();
             GC.SuppressFinalize(this);
         }
 
@@ -66,11 +62,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         {
             this.Dispatcher.InvokeAsync(() =>
             {
-                _saveJsonData.Data.Clear();
-                _saveJsonData.Data.AddRange(datas);
-                if (IsAutoSave)
+                this._saveJsonData.Data.Clear();
+                this._saveJsonData.Data.AddRange(datas);
+                if (this.IsAutoSave)
                 {
-                    _saveJsonData.TriggerSave();
+                    this._saveJsonData.TriggerSave();
                 }
             });
         }

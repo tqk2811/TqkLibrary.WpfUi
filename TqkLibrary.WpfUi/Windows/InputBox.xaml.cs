@@ -47,15 +47,15 @@ namespace TqkLibrary.WpfUi.Windows
         string _Text = string.Empty;
         public string Text
         {
-            get { return _Text; }
-            set { _Text = value; NotifyPropertyChange(); }
+            get { return this._Text; }
+            set { this._Text = value; this.NotifyPropertyChange(); }
         }
 
         TextAlignment _TextAlignment = TextAlignment.Left;
         public TextAlignment TextAlignment
         {
-            get { return _TextAlignment; }
-            set { _TextAlignment = value; NotifyPropertyChange(); }
+            get { return this._TextAlignment; }
+            set { this._TextAlignment = value; this.NotifyPropertyChange(); }
         }
     }
     /// <summary>
@@ -73,16 +73,16 @@ namespace TqkLibrary.WpfUi.Windows
         /// </summary>
         public TextAlignment TextAlignment
         {
-            get { return inputBoxVM.TextAlignment; }
-            set { inputBoxVM.TextAlignment = value; }
+            get { return this.inputBoxVM.TextAlignment; }
+            set { this.inputBoxVM.TextAlignment = value; }
         }
         /// <summary>
         /// 
         /// </summary>
         public string Text
         {
-            get { return inputBoxVM.Text; }
-            set { inputBoxVM.Text = value; }
+            get { return this.inputBoxVM.Text; }
+            set { this.inputBoxVM.Text = value; }
         }
 
         readonly InputBoxVM inputBoxVM;
@@ -91,7 +91,7 @@ namespace TqkLibrary.WpfUi.Windows
         /// </summary>
         public InputBox()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.inputBoxVM = this.DataContext as InputBoxVM ?? throw new InvalidOperationException();
         }
 
@@ -99,7 +99,7 @@ namespace TqkLibrary.WpfUi.Windows
         {
             if (Validate is not null)
             {
-                ValidateEventArgs validateEventArgs = new ValidateEventArgs();
+                ValidateEventArgs validateEventArgs = new();
                 Validate?.Invoke(this, validateEventArgs);
                 if (!validateEventArgs.IsValid)
                 {
@@ -121,15 +121,15 @@ namespace TqkLibrary.WpfUi.Windows
         {
             if (e.Key == Key.Enter)
             {
-                Add_Click(null, null);
+                this.Add_Click(null, null);
             }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Tb.Focus();
-            Tb.SelectAll();
-            Keyboard.Focus(Tb);
+            this.Tb.Focus();
+            this.Tb.SelectAll();
+            Keyboard.Focus(this.Tb);
         }
     }
 }

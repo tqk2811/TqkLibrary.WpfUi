@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 
 namespace TqkLibrary.WpfUi.Converters
@@ -26,7 +25,7 @@ namespace TqkLibrary.WpfUi.Converters
         {
             bool val = value != null;//
             if (val) return val;
-            else return Result;
+            else return this.Result;
         }
         /// <summary>
         /// 

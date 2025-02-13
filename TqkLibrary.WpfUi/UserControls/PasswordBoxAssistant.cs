@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace TqkLibrary.WpfUi.UserControls
@@ -18,27 +13,27 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public static readonly DependencyProperty BoundPassword =
             DependencyProperty.RegisterAttached(
-                "BoundPassword", 
-                typeof(string), 
-                typeof(PasswordBoxAssistant), 
+                "BoundPassword",
+                typeof(string),
+                typeof(PasswordBoxAssistant),
                 new PropertyMetadata(string.Empty, OnBoundPasswordChanged));
-        
+
         /// <summary>
         /// 
         /// </summary>
-        public static readonly DependencyProperty BindPassword = 
+        public static readonly DependencyProperty BindPassword =
             DependencyProperty.RegisterAttached(
-                "BindPassword", 
+                "BindPassword",
                 typeof(bool),
-                typeof(PasswordBoxAssistant), 
+                typeof(PasswordBoxAssistant),
                 new PropertyMetadata(false, OnBindPasswordChanged));
 
-        
+
         private static readonly DependencyProperty UpdatingPassword =
             DependencyProperty.RegisterAttached(
                 "UpdatingPassword",
-                typeof(bool), 
-                typeof(PasswordBoxAssistant), 
+                typeof(bool),
+                typeof(PasswordBoxAssistant),
                 new PropertyMetadata(false));
 
         private static void OnBoundPasswordChanged(DependencyObject? d, DependencyPropertyChangedEventArgs e)
@@ -52,7 +47,7 @@ namespace TqkLibrary.WpfUi.UserControls
                 return;
             }
 
-            if(box is not null)
+            if (box is not null)
             {
                 // avoid recursive updating by ignoring the box's changed event
                 box.PasswordChanged -= HandlePasswordChanged;
@@ -96,7 +91,7 @@ namespace TqkLibrary.WpfUi.UserControls
         private static void HandlePasswordChanged(object sender, RoutedEventArgs e)
         {
             PasswordBox? box = sender as PasswordBox;
-            if(box is not null)
+            if (box is not null)
             {
                 // set a flag to indicate that we're updating the password
                 SetUpdatingPassword(box, true);
@@ -105,7 +100,7 @@ namespace TqkLibrary.WpfUi.UserControls
                 SetUpdatingPassword(box, false);
             }
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

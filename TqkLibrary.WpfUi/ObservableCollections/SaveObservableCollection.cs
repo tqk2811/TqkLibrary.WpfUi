@@ -1,15 +1,11 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Timers;
 using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
@@ -41,7 +37,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
             this.Dispatcher.VerifyAccess();
 
-            using var l = GetLockLoader();
+            using var l = this.GetLockLoader();
             this.Clear();
             foreach (var item in datas)
             {
@@ -56,12 +52,12 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
         public virtual Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
-            => this.Dispatcher.TrueThreadInvokeAsync(() => Load(datas, func));
+            => this.Dispatcher.TrueThreadInvokeAsync(() => this.Load(datas, func));
 
         /// <summary>
         /// 
         /// </summary>
-        protected bool IsLoaded => _lockCount == 0;
+        protected bool IsLoaded => this._lockCount == 0;
 
         private int _lockCount = 0;
         /// <summary>
@@ -80,7 +76,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// 
         /// </summary>
         public virtual void Save()
-            => TriggerEventSave(this.Select(x => x.Data));
+            => this.TriggerEventSave(this.Select(x => x.Data));
 
         /// <summary>
         /// 
@@ -98,7 +94,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="item"></param>
         protected override void InsertItem(int index, TViewModel item)
         {
-            item.Change += ItemData_Change;
+            item.Change += this.ItemData_Change;
             base.InsertItem(index, item);
         }
         /// <summary>
@@ -106,7 +102,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         protected override void ClearItems()
         {
-            foreach (var item in this) item.Change -= ItemData_Change;
+            foreach (var item in this) item.Change -= this.ItemData_Change;
             base.ClearItems();
         }
         /// <summary>
@@ -115,7 +111,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="index"></param>
         protected override void RemoveItem(int index)
         {
-            this[index].Change -= ItemData_Change;
+            this[index].Change -= this.ItemData_Change;
             base.RemoveItem(index);
         }
         /// <summary>
@@ -125,8 +121,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="item"></param>
         protected override void SetItem(int index, TViewModel item)
         {
-            this[index].Change -= ItemData_Change;
-            item.Change += ItemData_Change;
+            this[index].Change -= this.ItemData_Change;
+            item.Change += this.ItemData_Change;
             base.SetItem(index, item);
         }
         /// <summary>
@@ -135,7 +131,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="e"></param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (IsLoaded) Save();
+            if (this.IsLoaded) this.Save();
             base.OnCollectionChanged(e);
         }
 
@@ -147,8 +143,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         }
         private void ItemData_Change(object obj, TData data)
         {
-            OnItemChanged(data);
-            Save();
+            this.OnItemChanged(data);
+            this.Save();
         }
         /// <summary>
         /// 
@@ -156,7 +152,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="name"></param>
         protected void NotifyPropertyChange([CallerMemberName] string name = "")
         {
-            OnPropertyChanged(new PropertyChangedEventArgs(name));
+            this.OnPropertyChanged(new PropertyChangedEventArgs(name));
         }
 
 
@@ -167,15 +163,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             public LockHelper(SaveObservableCollection<TData, TViewModel> collection)
             {
                 this._collection = collection ?? throw new ArgumentNullException(nameof(collection));
-                Interlocked.Increment(ref _collection._lockCount);
+                Interlocked.Increment(ref this._collection._lockCount);
             }
             ~LockHelper()
             {
-                Interlocked.Decrement(ref _collection._lockCount);
+                Interlocked.Decrement(ref this._collection._lockCount);
             }
             public void Dispose()
             {
-                Interlocked.Decrement(ref _collection._lockCount);
+                Interlocked.Decrement(ref this._collection._lockCount);
                 GC.SuppressFinalize(this);
             }
         }

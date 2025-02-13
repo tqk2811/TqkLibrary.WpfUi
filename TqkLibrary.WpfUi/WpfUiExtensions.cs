@@ -1,15 +1,14 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Media.Imaging;
 using System.Drawing;
-using System.Windows.Threading;
-using System.Threading.Tasks;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using TqkLibrary.WpfUi.Interfaces;
 
 namespace TqkLibrary.WpfUi
@@ -48,10 +47,10 @@ namespace TqkLibrary.WpfUi
         /// <returns></returns>
         public static BitmapImage ToBitmapImage(this Bitmap bitmap)
         {
-            using MemoryStream memory = new MemoryStream();
+            using MemoryStream memory = new();
             bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
             memory.Position = 0;
-            BitmapImage bitmapimage = new BitmapImage();
+            BitmapImage bitmapimage = new();
             bitmapimage.BeginInit();
             bitmapimage.StreamSource = memory;
             bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
@@ -66,7 +65,7 @@ namespace TqkLibrary.WpfUi
         /// <param name="bitmap"></param>
         public static void FillBitmapImage(this BitmapImage bitmapImage, Bitmap bitmap)
         {
-            using MemoryStream memory = new MemoryStream();
+            using MemoryStream memory = new();
             bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
             memory.Position = 0;
             bitmapImage.BeginInit();
@@ -92,8 +91,8 @@ namespace TqkLibrary.WpfUi
             if (input == null || input.Count() <= 1) return input!;
             if (count <= 0) count = 1;
 
-            Random random = new Random(DateTime.Now.Millisecond);
-            List<T> result = new List<T>();
+            Random random = new(DateTime.Now.Millisecond);
+            List<T> result = new();
 
             if (randomFirst) result.AddRange(input.OrderBy(x => Guid.NewGuid()));
             else result.AddRange(input);
@@ -127,7 +126,7 @@ namespace TqkLibrary.WpfUi
             var enumType = value.GetType();
             string? name = Enum.GetName(enumType, value);
             if (string.IsNullOrWhiteSpace(name))
-                return default(TAttribute);
+                return default;
             return enumType.GetField(name)?.GetCustomAttributes(false).OfType<TAttribute>().SingleOrDefault();
         }
 

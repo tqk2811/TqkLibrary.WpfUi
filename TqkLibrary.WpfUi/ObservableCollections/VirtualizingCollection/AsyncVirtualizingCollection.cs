@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 {
@@ -24,7 +21,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider)
             : base(itemsProvider)
         {
-            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
+            this._synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize)
             : base(itemsProvider, pageSize)
         {
-            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
+            this._synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         /// <summary>
@@ -47,7 +44,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         public AsyncVirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout)
             : base(itemsProvider, pageSize, pageTimeout)
         {
-            _synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
+            this._synchronizationContext = SynchronizationContext.Current ?? throw new InvalidOperationException($"Must create in main thread");
         }
 
         #endregion
@@ -63,7 +60,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value>The synchronization context.</value>
         protected SynchronizationContext SynchronizationContext
         {
-            get { return _synchronizationContext; }
+            get { return this._synchronizationContext; }
         }
 
         #endregion
@@ -86,7 +83,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// Fires the collection reset event.
         /// </summary>
         private void FireCollectionReset()
-            => OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            => this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
 
         #endregion
 
@@ -109,7 +106,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
         private void FirePropertyChanged(string propertyName)
-            => OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            => this.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
 
         #endregion
 
@@ -127,15 +124,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         {
             get
             {
-                return _isLoading;
+                return this._isLoading;
             }
             set
             {
-                if (value != _isLoading)
+                if (value != this._isLoading)
                 {
-                    _isLoading = value;
+                    this._isLoading = value;
                 }
-                FirePropertyChanged(nameof(IsLoading));
+                this.FirePropertyChanged(nameof(this.IsLoading));
             }
         }
 
@@ -148,9 +145,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// </summary>
         protected override void LoadCount()
         {
-            Count = 0;
-            IsLoading = true;
-            ThreadPool.QueueUserWorkItem(LoadCountWork);
+            this.Count = 0;
+            this.IsLoading = true;
+            ThreadPool.QueueUserWorkItem(this.LoadCountWork);
         }
 
         /// <summary>
@@ -159,8 +156,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="args">None required.</param>
         private void LoadCountWork(object? args)
         {
-            int count = FetchCount();
-            SynchronizationContext?.Send(LoadCountCompleted, count);
+            int count = this.FetchCount();
+            this.SynchronizationContext?.Send(this.LoadCountCompleted, count);
         }
 
         /// <summary>
@@ -169,9 +166,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="args">Number of items returned.</param>
         private void LoadCountCompleted(object? args)
         {
-            Count = (int)args!;
-            IsLoading = false;
-            FireCollectionReset();
+            this.Count = (int)args!;
+            this.IsLoading = false;
+            this.FireCollectionReset();
         }
 
         /// <summary>
@@ -180,8 +177,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="index">The index.</param>
         protected override void LoadPage(int index)
         {
-            IsLoading = true;
-            ThreadPool.QueueUserWorkItem(LoadPageWork, index);
+            this.IsLoading = true;
+            ThreadPool.QueueUserWorkItem(this.LoadPageWork, index);
         }
 
         /// <summary>
@@ -191,8 +188,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         private void LoadPageWork(object? args)
         {
             int pageIndex = (int)args!;
-            IList<T> page = FetchPage(pageIndex);
-            SynchronizationContext?.Send(LoadPageCompleted, new object[] { pageIndex, page });
+            IList<T> page = this.FetchPage(pageIndex);
+            this.SynchronizationContext?.Send(this.LoadPageCompleted, new object[] { pageIndex, page });
         }
 
         /// <summary>
@@ -204,9 +201,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
             int pageIndex = (int)((object[])args!)[0];
             IList<T> page = (IList<T>)((object[])args)[1];
 
-            PopulatePage(pageIndex, page);
-            IsLoading = false;
-            FireCollectionReset();
+            this.PopulatePage(pageIndex, page);
+            this.IsLoading = false;
+            this.FireCollectionReset();
         }
 
         #endregion
@@ -215,7 +212,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 
         protected override void ItemsProvider_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            OnCollectionChanged(e);
+            this.OnCollectionChanged(e);
         }
 
         protected override void ItemsProvider_PropertyChanged(object? sender, PropertyChangedEventArgs e)

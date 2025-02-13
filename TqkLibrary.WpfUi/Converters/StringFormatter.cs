@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace TqkLibrary.WpfUi.Converters
@@ -29,7 +25,7 @@ namespace TqkLibrary.WpfUi.Converters
                 if (string.IsNullOrEmpty(format)) return values[0]?.ToString();
                 else
                 {
-                    _stringFormat = format;
+                    this._stringFormat = format;
                     if (values[0] is double _double) return _double.ToString(format);
                     return string.Format(format, values[0]);
                 }
@@ -46,7 +42,7 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object?[] ConvertBack(object? value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            return new object?[] { value, _stringFormat };
+            return new object?[] { value, this._stringFormat };
         }
     }
 }

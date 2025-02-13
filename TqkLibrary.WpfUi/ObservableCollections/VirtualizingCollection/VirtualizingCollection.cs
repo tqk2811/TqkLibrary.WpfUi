@@ -46,8 +46,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 {
@@ -75,7 +73,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="pageTimeout">The page timeout.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize, int pageTimeout) : this(itemsProvider, pageSize)
         {
-            _pageTimeout = pageTimeout;
+            this._pageTimeout = pageTimeout;
         }
 
         /// <summary>
@@ -85,7 +83,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="pageSize">Size of the page.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider, int pageSize) : this(itemsProvider)
         {
-            _pageSize = pageSize;
+            this._pageSize = pageSize;
         }
 
         /// <summary>
@@ -94,9 +92,9 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="itemsProvider">The items provider.</param>
         public VirtualizingCollection(IItemsProvider<T> itemsProvider)
         {
-            _itemsProvider = itemsProvider;
-            _itemsProvider.PropertyChanged += ItemsProvider_PropertyChanged;
-            _itemsProvider.CollectionChanged += ItemsProvider_CollectionChanged;
+            this._itemsProvider = itemsProvider;
+            this._itemsProvider.PropertyChanged += this.ItemsProvider_PropertyChanged;
+            this._itemsProvider.CollectionChanged += this.ItemsProvider_CollectionChanged;
         }
 
         #endregion
@@ -120,7 +118,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value>The items provider.</value>
         public IItemsProvider<T> ItemsProvider
         {
-            get { return _itemsProvider; }
+            get { return this._itemsProvider; }
         }
 
         #endregion
@@ -135,7 +133,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value>The size of the page.</value>
         public int PageSize
         {
-            get { return _pageSize; }
+            get { return this._pageSize; }
         }
 
         #endregion
@@ -150,7 +148,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <value>The page timeout.</value>
         public long PageTimeout
         {
-            get { return _pageTimeout; }
+            get { return this._pageTimeout; }
         }
 
         #endregion
@@ -173,15 +171,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         {
             get
             {
-                if (_count == -1)
+                if (this._count == -1)
                 {
-                    LoadCount();
+                    this.LoadCount();
                 }
-                return _count;
+                return this._count;
             }
             protected set
             {
-                _count = value;
+                this._count = value;
             }
         }
 
@@ -199,29 +197,29 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
             get
             {
                 // determine which page and offset within page
-                int pageIndex = index / PageSize;
-                int pageOffset = index % PageSize;
+                int pageIndex = index / this.PageSize;
+                int pageOffset = index % this.PageSize;
 
                 // request primary page
-                RequestPage(pageIndex);
+                this.RequestPage(pageIndex);
 
                 // if accessing upper 50% then request next page
-                if (pageOffset > PageSize / 2 && pageIndex < Count / PageSize)
-                    RequestPage(pageIndex + 1);
+                if (pageOffset > this.PageSize / 2 && pageIndex < this.Count / this.PageSize)
+                    this.RequestPage(pageIndex + 1);
 
                 // if accessing lower 50% then request prev page
-                if (pageOffset < PageSize / 2 && pageIndex > 0)
-                    RequestPage(pageIndex - 1);
+                if (pageOffset < this.PageSize / 2 && pageIndex > 0)
+                    this.RequestPage(pageIndex - 1);
 
                 // remove stale pages
-                CleanUpPages();
+                this.CleanUpPages();
 
                 // defensive check in case of async load
-                if (_pages[pageIndex] == null)
-                    return default(T)!;
+                if (this._pages[pageIndex] == null)
+                    return default!;
 
                 // return requested item
-                return _pages[pageIndex].Skip(pageOffset).FirstOrDefault()!;
+                return this._pages[pageIndex].Skip(pageOffset).FirstOrDefault()!;
             }
             set { throw new NotSupportedException(); }
         }
@@ -247,7 +245,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// </returns>
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < this.Count; i++)
             {
                 yield return this[i]!;
             }
@@ -261,7 +259,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return GetEnumerator();
+            return this.GetEnumerator();
         }
 
         #endregion
@@ -281,7 +279,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         #endregion
 
         #region Contains
-        bool IList.Contains(object? value) => Contains((T)value!);
+        bool IList.Contains(object? value) => this.Contains((T)value!);
         /// <summary>
         /// Not supported.
         /// </summary>
@@ -304,7 +302,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 
         #region IndexOf
 
-        int IList.IndexOf(object? value) => IndexOf((T)value!);
+        int IList.IndexOf(object? value) => this.IndexOf((T)value!);
 
         /// <summary>
         /// Not supported
@@ -331,7 +329,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
         public void Insert(int index, T item) => throw new NotSupportedException();
-        void IList.Insert(int index, object? value) => Insert(index, (T)value!);
+        void IList.Insert(int index, object? value) => this.Insert(index, (T)value!);
 
         #endregion
 
@@ -348,7 +346,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
         /// </exception>
         public void RemoveAt(int index) => throw new NotSupportedException();
-        void IList.Remove(object? value) => Remove((T)value!);
+        void IList.Remove(object? value) => this.Remove((T)value!);
         /// <summary>
         /// Not supported.
         /// </summary>
@@ -431,22 +429,22 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
 
         #region Paging
 
-        private readonly Dictionary<int, IList<T>> _pages = new Dictionary<int, IList<T>>();
-        private readonly Dictionary<int, DateTime> _pageTouchTimes = new Dictionary<int, DateTime>();
+        private readonly Dictionary<int, IList<T>> _pages = new();
+        private readonly Dictionary<int, DateTime> _pageTouchTimes = new();
 
         /// <summary>
         /// Cleans up any stale pages that have not been accessed in the period dictated by PageTimeout.
         /// </summary>
         public void CleanUpPages()
         {
-            List<int> keys = new List<int>(_pageTouchTimes.Keys);
+            List<int> keys = new(this._pageTouchTimes.Keys);
             foreach (int key in keys)
             {
                 // page 0 is a special case, since WPF ItemsControl access the first item frequently
-                if (key != 0 && (DateTime.Now - _pageTouchTimes[key]).TotalMilliseconds > PageTimeout)
+                if (key != 0 && (DateTime.Now - this._pageTouchTimes[key]).TotalMilliseconds > this.PageTimeout)
                 {
-                    _pages.Remove(key);
-                    _pageTouchTimes.Remove(key);
+                    this._pages.Remove(key);
+                    this._pageTouchTimes.Remove(key);
                     Trace.WriteLine("Removed Page: " + key);
                 }
             }
@@ -460,8 +458,8 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         protected virtual void PopulatePage(int pageIndex, IList<T> page)
         {
             Trace.WriteLine("Page populated: " + pageIndex);
-            if (_pages.ContainsKey(pageIndex))
-                _pages[pageIndex] = page;
+            if (this._pages.ContainsKey(pageIndex))
+                this._pages[pageIndex] = page;
         }
 
         /// <summary>
@@ -471,16 +469,16 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="pageIndex">Index of the page.</param>
         protected virtual void RequestPage(int pageIndex)
         {
-            if (!_pages.ContainsKey(pageIndex))
+            if (!this._pages.ContainsKey(pageIndex))
             {
-                _pages.Add(pageIndex, new List<T>());
-                _pageTouchTimes.Add(pageIndex, DateTime.Now);
+                this._pages.Add(pageIndex, new List<T>());
+                this._pageTouchTimes.Add(pageIndex, DateTime.Now);
                 Trace.WriteLine("Added page: " + pageIndex);
-                LoadPage(pageIndex);
+                this.LoadPage(pageIndex);
             }
             else
             {
-                _pageTouchTimes[pageIndex] = DateTime.Now;
+                this._pageTouchTimes[pageIndex] = DateTime.Now;
             }
         }
 
@@ -493,7 +491,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// </summary>
         protected virtual void LoadCount()
         {
-            Count = FetchCount();
+            this.Count = this.FetchCount();
         }
 
         /// <summary>
@@ -502,7 +500,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <param name="pageIndex">Index of the page.</param>
         protected virtual void LoadPage(int pageIndex)
         {
-            PopulatePage(pageIndex, FetchPage(pageIndex));
+            this.PopulatePage(pageIndex, this.FetchPage(pageIndex));
         }
 
         #endregion
@@ -516,7 +514,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <returns></returns>
         protected IList<T> FetchPage(int pageIndex)
         {
-            return ItemsProvider.FetchRange(pageIndex * PageSize, PageSize);
+            return this.ItemsProvider.FetchRange(pageIndex * this.PageSize, this.PageSize);
         }
 
         /// <summary>
@@ -525,7 +523,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections.VirtualizingCollection
         /// <returns></returns>
         protected int FetchCount()
         {
-            return ItemsProvider.FetchCount();
+            return this.ItemsProvider.FetchCount();
         }
 
         #endregion

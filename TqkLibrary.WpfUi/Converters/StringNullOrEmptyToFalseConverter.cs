@@ -23,9 +23,9 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str))) 
-                return Result;
-            return !Result;
+            if (value is null || (value is string str && string.IsNullOrWhiteSpace(str)))
+                return this.Result;
+            return !this.Result;
         }
         /// <summary>
         /// 

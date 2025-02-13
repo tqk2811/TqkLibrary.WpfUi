@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows;
 
 namespace TqkLibrary.WpfUi.UserControls
 {
     public partial class TokenizingControl : RichTextBox
     {
-        static readonly ResourceDictionary _resourceDictionary = new ResourceDictionary()
+        static readonly ResourceDictionary _resourceDictionary = new()
         {
             Source = new Uri("pack://application:,,,/TqkLibrary.WpfUi;component/UserControls/TokenizingControlDictionary.xaml")
         };
@@ -25,8 +22,8 @@ namespace TqkLibrary.WpfUi.UserControls
                 );
         public DataTemplate TokenTemplate
         {
-            get { return (DataTemplate)GetValue(TokenTemplateProperty); }
-            set { SetValue(TokenTemplateProperty, value); }
+            get { return (DataTemplate)this.GetValue(TokenTemplateProperty); }
+            set { this.SetValue(TokenTemplateProperty, value); }
         }
 
 
@@ -39,18 +36,18 @@ namespace TqkLibrary.WpfUi.UserControls
                 );
         public string TokenMatcher
         {
-            get { return (string)GetValue(TokenMatcherProperty); }
-            set { SetValue(TokenMatcherProperty, value); }
+            get { return (string)this.GetValue(TokenMatcherProperty); }
+            set { this.SetValue(TokenMatcherProperty, value); }
         }
 
         public TokenizingControl()
         {
-            TextChanged += OnTokenTextChanged;
+            TextChanged += this.OnTokenTextChanged;
         }
 
         string? ReplaceMatcher(string text)
         {
-            if (text.EndsWith(TokenMatcher))
+            if (text.EndsWith(this.TokenMatcher))
             {
                 // Remove the ';'
                 return text.Substring(0, text.Length - 1).Trim();
@@ -61,10 +58,10 @@ namespace TqkLibrary.WpfUi.UserControls
 
         private void OnTokenTextChanged(object sender, TextChangedEventArgs e)
         {
-            string? text = CaretPosition.GetTextInRun(LogicalDirection.Backward);
-            if(!string.IsNullOrWhiteSpace(text) && text!.Contains(TokenMatcher))
+            string? text = this.CaretPosition.GetTextInRun(LogicalDirection.Backward);
+            if (!string.IsNullOrWhiteSpace(text) && text!.Contains(this.TokenMatcher))
             {
-                ReplaceTextWithToken(text!);
+                this.ReplaceTextWithToken(text!);
             }
         }
 
@@ -72,9 +69,9 @@ namespace TqkLibrary.WpfUi.UserControls
         {
             string token = string.Empty;
             // Remove the handler temporarily as we will be modifying tokens below, causing more TextChanged events
-            TextChanged -= OnTokenTextChanged;
+            TextChanged -= this.OnTokenTextChanged;
 
-            var para = CaretPosition.Paragraph;
+            var para = this.CaretPosition.Paragraph;
 
             Run? matchedRun = para.Inlines.FirstOrDefault(inline =>
             {
@@ -83,7 +80,7 @@ namespace TqkLibrary.WpfUi.UserControls
             }) as Run;
             if (matchedRun is not null) // Found a Run that matched the inputText
             {
-                var tokenContainer = CreateTokenContainer(inputText, token);
+                var tokenContainer = this.CreateTokenContainer(inputText, token);
                 para.Inlines.InsertBefore(matchedRun, tokenContainer);
 
                 // Remove only if the Text in the Run is the same as inputText, else split up
@@ -100,7 +97,7 @@ namespace TqkLibrary.WpfUi.UserControls
                 }
             }
 
-            TextChanged += OnTokenTextChanged;
+            TextChanged += this.OnTokenTextChanged;
         }
 
         private InlineUIContainer CreateTokenContainer(string inputText, string token)
@@ -110,7 +107,7 @@ namespace TqkLibrary.WpfUi.UserControls
             var presenter = new ContentPresenter()
             {
                 Content = token,
-                ContentTemplate = TokenTemplate,
+                ContentTemplate = this.TokenTemplate,
             };
 
             // BaselineAlignment is needed to align with Run

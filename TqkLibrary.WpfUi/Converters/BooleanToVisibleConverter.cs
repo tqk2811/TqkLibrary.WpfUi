@@ -47,20 +47,20 @@ namespace TqkLibrary.WpfUi.Converters
         /// <returns></returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null) return DefaultOnNull;
+            if (value == null) return this.DefaultOnNull;
             if (value is bool b)
             {
                 if (this.IsReversedBool) b = !b;
-                return b ? VisibilityTypeOnTrue : VisibilityTypeOnFalse;
+                return b ? this.VisibilityTypeOnTrue : this.VisibilityTypeOnFalse;
             }
             else if (value is bool?)
             {
                 bool? nb = value as bool?;
-                if (!nb.HasValue) return DefaultOnNull;
+                if (!nb.HasValue) return this.DefaultOnNull;
                 if (this.IsReversedBool) nb = !nb.Value;
-                return nb.Value ? VisibilityTypeOnTrue : VisibilityTypeOnFalse;
+                return nb.Value ? this.VisibilityTypeOnTrue : this.VisibilityTypeOnFalse;
             }
-            return DefaultOnNonBool;
+            return this.DefaultOnNonBool;
         }
         /// <summary>
         /// 
@@ -77,8 +77,8 @@ namespace TqkLibrary.WpfUi.Converters
             {
                 if (value is Visibility visibility)
                 {
-                    if (visibility == VisibilityTypeOnTrue) return IsReversedBool ? false : true;
-                    if (visibility == VisibilityTypeOnFalse) return IsReversedBool ? true : false;
+                    if (visibility == this.VisibilityTypeOnTrue) return this.IsReversedBool ? false : true;
+                    if (visibility == this.VisibilityTypeOnFalse) return this.IsReversedBool ? true : false;
                 }
             }
             return false;

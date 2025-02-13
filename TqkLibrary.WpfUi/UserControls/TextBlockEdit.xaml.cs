@@ -1,8 +1,6 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace TqkLibrary.WpfUi.UserControls
@@ -71,24 +69,24 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public bool IsEditingOnLMouseDown
         {
-            get { return (bool)GetValue(IsEditingOnLMouseDownProperty); }
-            set { SetValue(IsEditingOnLMouseDownProperty, value); }
+            get { return (bool)this.GetValue(IsEditingOnLMouseDownProperty); }
+            set { this.SetValue(IsEditingOnLMouseDownProperty, value); }
         }
         /// <summary>
         /// 
         /// </summary>
         public bool IsEditing
         {
-            get { return (bool)GetValue(IsEditingProperty); }
-            set { SetValue(IsEditingProperty, value); }
+            get { return (bool)this.GetValue(IsEditingProperty); }
+            set { this.SetValue(IsEditingProperty, value); }
         }
         /// <summary>
         /// 
         /// </summary>
         public bool IsSellectAllOnEditing
         {
-            get { return (bool)GetValue(IsSellectAllOnEditingProperty); }
-            set { SetValue(IsSellectAllOnEditingProperty, value); }
+            get { return (bool)this.GetValue(IsSellectAllOnEditingProperty); }
+            set { this.SetValue(IsSellectAllOnEditingProperty, value); }
         }
 
         /// <summary>
@@ -96,8 +94,8 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public string Text
         {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
+            get { return (string)this.GetValue(TextProperty); }
+            set { this.SetValue(TextProperty, value); }
         }
 
         /// <summary>
@@ -105,8 +103,8 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public TextAlignment TextAlignment
         {
-            get { return (TextAlignment)GetValue(TextAlignmentProperty); }
-            set { SetValue(TextAlignmentProperty, value); }
+            get { return (TextAlignment)this.GetValue(TextAlignmentProperty); }
+            set { this.SetValue(TextAlignmentProperty, value); }
         }
 
         /// <summary>
@@ -114,16 +112,16 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public bool AcceptsReturn
         {
-            get { return (bool)GetValue(AcceptsReturnProperty); }
-            set { SetValue(AcceptsReturnProperty, value); }
+            get { return (bool)this.GetValue(AcceptsReturnProperty); }
+            set { this.SetValue(AcceptsReturnProperty, value); }
         }
         /// <summary>
         /// 
         /// </summary>
         public bool AcceptsTab
         {
-            get { return (bool)GetValue(AcceptsTabProperty); }
-            set { SetValue(AcceptsTabProperty, value); }
+            get { return (bool)this.GetValue(AcceptsTabProperty); }
+            set { this.SetValue(AcceptsTabProperty, value); }
         }
 
         /// <summary>
@@ -131,7 +129,7 @@ namespace TqkLibrary.WpfUi.UserControls
         /// </summary>
         public TextBlockEdit()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void tb_name_GotFocus(object sender, RoutedEventArgs e)
@@ -139,10 +137,10 @@ namespace TqkLibrary.WpfUi.UserControls
             TextBox? textBox = sender as TextBox;
             if (textBox is not null)
             {
-                Dispatcher.BeginInvoke(DispatcherPriority.Input,() =>
+                this.Dispatcher.BeginInvoke(DispatcherPriority.Input, () =>
                 {
                     Keyboard.Focus(textBox);
-                    if (IsSellectAllOnEditing) textBox.SelectAll();
+                    if (this.IsSellectAllOnEditing) textBox.SelectAll();
                 });
             }
         }
@@ -150,7 +148,7 @@ namespace TqkLibrary.WpfUi.UserControls
         private void tb_name_LostFocus(object sender, RoutedEventArgs e)
         {
             Keyboard.ClearFocus();
-            IsEditing = false;
+            this.IsEditing = false;
         }
 
         private void tb_name_KeyDown(object sender, KeyEventArgs e)
@@ -158,15 +156,15 @@ namespace TqkLibrary.WpfUi.UserControls
             if (e.Key == Key.Enter)
             {
                 Keyboard.ClearFocus();
-                IsEditing = false;
+                this.IsEditing = false;
             }
         }
 
         private void root_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && IsEditingOnLMouseDown)
+            if (e.LeftButton == MouseButtonState.Pressed && this.IsEditingOnLMouseDown)
             {
-                IsEditing = true;
+                this.IsEditing = true;
             }
         }
     }
