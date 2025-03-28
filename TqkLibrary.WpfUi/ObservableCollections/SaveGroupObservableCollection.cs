@@ -144,6 +144,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
                 {
                     //search mode, just add to last
                     this._datas.Add(item);
+                    Save();
                 }
             }
             else
