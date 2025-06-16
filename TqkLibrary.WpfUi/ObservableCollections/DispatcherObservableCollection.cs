@@ -17,7 +17,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
     /// 
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class DispatcherObservableCollection<T> : ObservableCollection<T>, IMainThread
+    public class DispatcherObservableCollection<T> : ObservableCollection<T>, IMainThreadCollection<T>
     {
         Cursor? _Cursor = null;
         public virtual Cursor? Cursor
