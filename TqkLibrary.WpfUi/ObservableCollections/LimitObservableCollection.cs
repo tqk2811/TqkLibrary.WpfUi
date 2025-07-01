@@ -1,5 +1,11 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Shapes;
 
 namespace TqkLibrary.WpfUi.ObservableCollections
 {
@@ -58,19 +64,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             if (this.Count == this.Limit) base.RemoveAt(this.IsInsertTop ? this.Count - 1 : 0);
             if (this.LogPath != null && this.IsExportToFile)
             {
-                string path = this.LogPath.Invoke();
-                if (!string.IsNullOrEmpty(path))
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        try
-                        {
-                            using StreamWriter sw = new(path, true);
-                            sw.WriteLine(item?.ToString());
-                        }
-                        catch { }
-                    });
-                }
+                _ = AppendFileAsync(item);
             }
             base.InsertItem(this.IsInsertTop ? 0 : this.Count, item);
         }
@@ -93,6 +87,43 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         protected override void SetItem(int index, T item)
         {
             throw new NotSupportedException();// base.SetItem(IsInsertTop ? 0 : this.Count, item);
+        }
+
+
+        public async Task AddAsync(T item, bool isInsertcollection, CancellationToken cancellationToken = default)
+        {
+            if (isInsertcollection)
+            {
+                await this.AddAsync(item, cancellationToken);
+            }
+            else
+            {
+                await AppendFileAsync(item);
+            }
+        }
+
+        public async Task AppendFileAsync(T item)
+        {
+            string? data = item?.ToString();
+            if (!string.IsNullOrWhiteSpace(data))
+            {
+                string path = this.LogPath.Invoke();
+                if (!string.IsNullOrEmpty(path))
+                {
+                    await this.Dispatcher.InvokeAsync(async () =>
+                    {
+                        try
+                        {
+                            using StreamWriter sw = new(path, true, Encoding.UTF8);
+                            await sw.WriteLineAsync(data);
+                        }
+                        catch (Exception ex)
+                        {
+                            Debug.WriteLine($"Error writing to log file: {ex.Message}");
+                        }
+                    });
+                }
+            }
         }
     }
 }
