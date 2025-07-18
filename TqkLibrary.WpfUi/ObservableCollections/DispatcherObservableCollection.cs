@@ -30,7 +30,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         public virtual T? SelectedItem
         {
             get { return this._SelectedItem; }
-            set { this._SelectedItem = value; this.OnPropertyChanged(nameof(this.Cursor)); }
+            set { this._SelectedItem = value; this.OnPropertyChanged(nameof(this.SelectedItem)); }
         }
 
 
