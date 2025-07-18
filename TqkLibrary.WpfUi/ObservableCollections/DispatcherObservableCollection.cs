@@ -26,6 +26,16 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             set { this._Cursor = value; this.OnPropertyChanged(nameof(this.Cursor)); }
         }
 
+        T? _SelectedItem = default;
+        public virtual T? SelectedItem
+        {
+            get { return this._SelectedItem; }
+            set { this._SelectedItem = value; this.OnPropertyChanged(nameof(this.Cursor)); }
+        }
+
+
+
+
         public event Action<IEnumerable<T>>? OnItemsCleared;
         public event Action<T>? OnItemAdded;
         public event Action<T>? OnItemRemoved;
@@ -100,6 +110,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             }
         }
 
+        protected virtual void NotifyPropertyChange([CallerMemberName] string name = "") => this.OnPropertyChanged(new PropertyChangedEventArgs(name));
         protected virtual void OnPropertyChanged([CallerMemberName] string name = "") => this.OnPropertyChanged(new PropertyChangedEventArgs(name));
 
         protected override void ClearItems()
