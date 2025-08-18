@@ -19,10 +19,25 @@ namespace TqkLibrary.WpfUi.ObservableCollections
       where TData : class
       where TViewModel : class, IViewModel<TData>
     {
+        public class UpdateData
+        {
+            public required IEnumerable<TData> CurrentDatas { get; set; }
+            public IEnumerable<TData>? ChangedDatas { get; set; }
+
+            public int? NewStartingIndex { get; set; }
+            public IEnumerable<TData>? NewDatas { get; set; }
+
+            public int? OldStartingIndex { get; set; }
+            public IEnumerable<TData>? OldDatas { get; set; }
+
+        }
+        public delegate void SaveCallBack(UpdateData updateData);
+
+
         /// <summary>
         /// 
         /// </summary>
-        public event Action<IEnumerable<TData>>? OnSave;
+        public event SaveCallBack? OnSave;
 
         /// <summary>
         /// 
@@ -83,7 +98,13 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// </summary>
         /// <param name="datas"></param>
         protected virtual void TriggerEventSave(IEnumerable<TData> datas)
-            => this.OnSave?.Invoke(datas);
+            => this.TriggerEventSave(new UpdateData() { CurrentDatas = datas });
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="updateData"></param>
+        protected virtual void TriggerEventSave(UpdateData updateData)
+            => this.OnSave?.Invoke(updateData);
 
 
         #region ObservableCollection
@@ -131,7 +152,18 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="e"></param>
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (this.IsLoaded) this.Save();
+            if (this.IsLoaded)
+            {
+                this.TriggerEventSave(new UpdateData()
+                {
+                    CurrentDatas = this.Select(x => x.Data),
+                    ChangedDatas = null,
+                    NewStartingIndex = e.NewStartingIndex,
+                    NewDatas = e.NewItems?.Cast<TViewModel>().Select(x => x.Data),
+                    OldStartingIndex = e.OldStartingIndex,
+                    OldDatas = e.OldItems?.Cast<TViewModel>().Select(x => x.Data)
+                });
+            }
             base.OnCollectionChanged(e);
         }
 
@@ -144,15 +176,11 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         private void ItemData_Change(object obj, TData data)
         {
             this.OnItemChanged(data);
-            this.Save();
-        }
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        protected void NotifyPropertyChange([CallerMemberName] string name = "")
-        {
-            this.OnPropertyChanged(new PropertyChangedEventArgs(name));
+            this.TriggerEventSave(new UpdateData()
+            {
+                CurrentDatas = this.Select(x => x.Data),
+                ChangedDatas = new[] { data },
+            });
         }
 
 

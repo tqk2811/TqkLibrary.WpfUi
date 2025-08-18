@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TqkLibrary.Data.Json;
 using TqkLibrary.WpfUi.Interfaces;
 
@@ -40,8 +41,10 @@ namespace TqkLibrary.WpfUi.ObservableCollections
 
             this._saveJsonData = new SaveJsonData<List<TData>>(savePath, jsonSerializerSettings);
             base.Load(this._saveJsonData.Data, func);
-            base.OnSave += this.SaveFileObservableCollection_OnSave;
+            base.OnSave += SaveFileObservableCollection_OnSave;
         }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -58,12 +61,15 @@ namespace TqkLibrary.WpfUi.ObservableCollections
             GC.SuppressFinalize(this);
         }
 
-        private void SaveFileObservableCollection_OnSave(IEnumerable<TData> datas)
+        protected virtual void SaveFileObservableCollection_OnSave(UpdateData updateData)
         {
             this.Dispatcher.InvokeAsync(() =>
             {
-                this._saveJsonData.Data.Clear();
-                this._saveJsonData.Data.AddRange(datas);
+                if (updateData.NewDatas?.Any() == true || updateData.OldDatas?.Any() == true)
+                {
+                    this._saveJsonData.Data.Clear();
+                    this._saveJsonData.Data.AddRange(updateData.CurrentDatas);
+                }
                 if (this.IsAutoSave)
                 {
                     this._saveJsonData.TriggerSave();
