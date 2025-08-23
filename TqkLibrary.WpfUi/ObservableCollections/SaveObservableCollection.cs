@@ -45,7 +45,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="datas"></param>
         /// <param name="func"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public virtual void Load(IEnumerable<TData> datas, Func<TData, TViewModel> func)
+        public virtual void Load<TInput>(IEnumerable<TInput> datas, Func<TInput,TViewModel> func)
         {
             if (datas is null) throw new ArgumentNullException(nameof(datas));
             if (func is null) throw new ArgumentNullException(nameof(func));
@@ -66,7 +66,7 @@ namespace TqkLibrary.WpfUi.ObservableCollections
         /// <param name="func"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public virtual Task LoadAsync(IEnumerable<TData> datas, Func<TData, TViewModel> func)
+        public virtual Task LoadAsync<TInput>(IEnumerable<TInput> datas, Func<TInput, TViewModel> func)
             => this.Dispatcher.TrueThreadInvokeAsync(() => this.Load(datas, func));
 
         /// <summary>
