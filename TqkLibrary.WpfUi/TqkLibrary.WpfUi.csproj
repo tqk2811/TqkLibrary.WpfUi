@@ -19,6 +19,7 @@
 		<PackageReference Include="System.Linq.Async" Version="6.0.1" />
 		<PackageReference Include="TqkLibrary.CompilerServices" Version="1.0.0.3" />
 		<PackageReference Include="TqkLibrary.Data.Json" Version="1.0.0-build20240628151114" />
+		<PackageReference Include="TqkLibrary.Utils" Version="1.0.0-build20250909102808" />
 	</ItemGroup>
 
 	<ItemGroup>
