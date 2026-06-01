@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+	<Import Project="..\ProjectBuildProperties.targets" />
+
 	<PropertyGroup>
 		<TargetFrameworks>net462;net6.0-windows7.0;net8.0-windows7.0</TargetFrameworks>
 		<LangVersion>11.0</LangVersion>
