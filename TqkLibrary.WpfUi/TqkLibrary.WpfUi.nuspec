@@ -9,6 +9,7 @@
 		<projectUrl>https://github.com/tqk2811/TqkLibrary.WpfUi</projectUrl>
 		<repository type="git" url="https://github.com/tqk2811/TqkLibrary.WpfUi.git"/>
 		<license type="expression">MIT</license>
+		<readme>docs\README.md</readme>
 		<dependencies>
 			<group targetFramework="net462">
 				<dependency id="TqkLibrary.Data.Json" version="1.0.0-build20240628151114"/>
@@ -31,6 +32,7 @@
 		</dependencies>
 	</metadata>
 	<files>
+		<file src="..\README.md" target="docs\" />
 		<file src="bin\Release\**\$id$.dll" target="lib\" />
 		<file src="bin\Release\**\$id$.pdb" target="lib\" />
 		<file src="bin\Release\**\$id$.xml" target="lib\" />
